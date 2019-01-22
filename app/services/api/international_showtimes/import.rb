@@ -10,6 +10,7 @@ module Api::InternationalShowtimes
       purge_old_showtimes
       save_showtimes
       save_movie_details
+      save_end_at_showtimes
     end
 
     # Api::InternationalShowtimes::Import.new.save_genres
@@ -136,6 +137,13 @@ module Api::InternationalShowtimes
       end
     end
 
+    # Api::InternationalShowtimes::Import.new.save_end_at_showtimes
+    def save_end_at_showtimes
+      Showtime.where(end_at: nil).each do |showtime|
+        showtime.update(end_at: showtime.start_at + showtime.movie.running_time * 60) if showtime.movie.running_time
+      end
+    end
+
     private
     def backdrop_url(response)
       backdrop = nil
@@ -155,7 +163,7 @@ module Api::InternationalShowtimes
       return 'IMAX 3D' if showtime[:is_3d] && showtime[:is_imax]
       '2D'
     end
-    
+
     def backdrop_min_url(response)
       backdrop_min = nil
       scene_image = response[:scene_images]&.first

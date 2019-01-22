@@ -5,5 +5,6 @@ Rails.application.routes.draw do
 
     get :upcoming,       to: 'movies#upcoming'
     get :premiere,       to: 'movies#premiere'
+    get :reprojection,   to: 'movies#reprojection'
   end
 end

@@ -13,4 +13,9 @@ class V1::MoviesController < ApplicationController
     movies = Movie.premiere
     render json: MovieItemSerializer.new(movies).serialized_json
   end
+
+  def reprojection
+    movies = Movie.reprojection
+    render json: MovieItemSerializer.new(movies).serialized_json
+  end
 end

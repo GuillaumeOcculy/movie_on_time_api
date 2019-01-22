@@ -53,7 +53,7 @@ class Movie < ApplicationRecord
     movie_translations.find_by(language: language)&.title || original_title
   end
 
-  def synopsis(language)
+  def synopsis(language: 'fr')
     movie_translations.find_by(language: language)&.synopsis || movie_translations.where.not(synopsis: nil).first&.synopsis
   end
 
@@ -67,5 +67,17 @@ class Movie < ApplicationRecord
 
   def release_date(iso_code: 'FR')
     movie_countries.find_by(iso_code: iso_code)&.release_date
+  end
+
+  def showtimes_by_country(iso_code= 'FR')
+    showtimes.joins(:cinema).merge(Cinema.by_country(iso_code))
+  end
+
+  def first_live_showtime(iso_code= 'FR')
+    showtimes_by_country(iso_code).order(:start_date).first
+  end
+
+  def showtime_dates
+    showtimes.ordered_by_date.pluck(:start_date).uniq.first(7)
   end
 end

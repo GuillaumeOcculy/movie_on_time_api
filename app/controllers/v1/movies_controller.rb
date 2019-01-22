@@ -18,4 +18,9 @@ class V1::MoviesController < ApplicationController
     movies = Movie.reprojection
     render json: MovieItemSerializer.new(movies).serialized_json
   end
+
+  def show
+    movie = Movie.find(params[:id])
+    render json: MovieSerializer.new(movie, include: [:directors, :casts, :trailers, :genres]).serialized_json
+  end
 end

@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_110837) do
+ActiveRecord::Schema.define(version: 2019_01_22_111925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cities", force: :cascade do |t|
+    t.bigint "country_id"
+    t.string "external_id"
+    t.string "name"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "country_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_cities_on_country_id"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.string "iso_code"
+    t.string "language"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "genres", force: :cascade do |t|
     t.string "external_id"
@@ -22,4 +42,5 @@ ActiveRecord::Schema.define(version: 2019_01_22_110837) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "cities", "countries"
 end

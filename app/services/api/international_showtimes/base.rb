@@ -5,7 +5,6 @@ module Api::InternationalShowtimes
     base_uri Settings.international_showtimes.base_url
 
     def initialize
-      # @country = Country.find_by(name: 'France')
       @options = {headers: {'Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-API-Key' => Settings.international_showtimes.api_key}, format: :plain}
     end
 

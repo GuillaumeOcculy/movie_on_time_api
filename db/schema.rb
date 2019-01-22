@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_111925) do
+ActiveRecord::Schema.define(version: 2019_01_22_113555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chain_countries", force: :cascade do |t|
+    t.bigint "chain_id"
+    t.bigint "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chain_id"], name: "index_chain_countries_on_chain_id"
+    t.index ["country_id"], name: "index_chain_countries_on_country_id"
+  end
+
+  create_table "chains", force: :cascade do |t|
+    t.string "external_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "cities", force: :cascade do |t|
     t.bigint "country_id"
@@ -42,5 +58,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_111925) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "chain_countries", "chains"
+  add_foreign_key "chain_countries", "countries"
   add_foreign_key "cities", "countries"
 end

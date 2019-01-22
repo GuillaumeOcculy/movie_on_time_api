@@ -29,10 +29,20 @@ class Movie < ApplicationRecord
   scope :order_by_title, -> (language = 'fr') { includes(:movie_translations).where(movie_translations: {language: language}).order('movie_translations.title ASC') }
   scope :recent,    -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date DESC').order_by_title }
   scope :old,       -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date ASC').order_by_title }
-  
+  scope :old_premiere, -> { includes(:showtimes).order('showtimes.start_at') }
+
   scope :live, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date <= :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).recent(iso_code) }
   scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries, :movie_translations).merge(MovieCountry.upcoming(iso_code: iso_code)).distinct.old(iso_code) }
+  scope :premiere, -> (iso_code: 'FR') do
+    movies = joins(:movie_countries, :cinemas).merge(MovieCountry.upcoming(iso_code: iso_code)).merge(Cinema.by_country(iso_code)).distinct
+    movie_ids = movies.select do |movie|
+      showtime = movie.first_live_showtime(iso_code)
+      movie_country = movie.movie_countries.find_by(iso_code: iso_code)
+      showtime.start_date < movie_country.release_date
+    end.pluck(:id)
 
+    Movie.where(id: movie_ids).old_premiere
+  end
   # Methods
   def title(language = 'fr')
     movie_translations.find_by(language: language)&.title || original_title

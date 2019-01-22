@@ -4,5 +4,6 @@ Rails.application.routes.draw do
     root 'movies#index'
 
     get :upcoming,       to: 'movies#upcoming'
+    get :premiere,       to: 'movies#premiere'
   end
 end

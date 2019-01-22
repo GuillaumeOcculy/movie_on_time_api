@@ -8,4 +8,9 @@ class V1::MoviesController < ApplicationController
     movies = Movie.upcoming
     render json: MovieItemSerializer.new(movies).serialized_json
   end
+
+  def premiere
+    movies = Movie.premiere
+    render json: MovieItemSerializer.new(movies).serialized_json
+  end
 end

@@ -8,4 +8,7 @@ class Cinema < ApplicationRecord
 
   # Validations
   validates_presence_of :external_id, :name
+
+  # Scopes
+  scope :by_country,        -> (iso_code) { where(country_code: iso_code)}
 end

@@ -9,6 +9,7 @@ module Api::InternationalShowtimes
       save_upcoming_movies
       purge_old_showtimes
       save_showtimes
+      save_movie_details
     end
 
     # Api::InternationalShowtimes::Import.new.save_genres
@@ -93,6 +94,39 @@ module Api::InternationalShowtimes
       end
     end
 
+    # Api::InternationalShowtimes::Import.new.save_movie_details
+    def save_movie_details
+      Movie.draft.find_in_batches do |movies|
+        movies.each do |movie|
+          response = movie_details(movie.external_id, @country.iso_code.downcase)
+          next unless response
+
+          movie.update!(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime], 
+                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id], 
+                        backdrop_url: backdrop_url(response), backdrop_min_url: backdrop_min_url(response))
+
+          save_ratings(movie, response)
+          save_movie_genres(movie, response)
+          save_trailers(movie, response)
+          save_casts(movie, response)
+          save_directors(movie, response)
+
+          Country.all.each do |country|
+            response = movie_details(movie.external_id, country.language)
+
+            movie.movie_translations.find_or_create_by(language: country.language) do |new_movie|
+              new_movie.title = response[:title]
+              new_movie.synopsis = response[:synopsis]
+              new_movie.poster_url = poster_url(response)
+              new_movie.thumbnail_url = thumbnail_url(response)
+            end
+
+            save_release_date(movie, country, response)
+          end
+        end
+      end
+    end
+
     # Showtimes we can't find anymore on the API
     # Api::InternationalShowtimes::Import.new.purge_old_showtimes
     def purge_old_showtimes
@@ -102,11 +136,96 @@ module Api::InternationalShowtimes
       end
     end
 
+    private
+    def backdrop_url(response)
+      backdrop = nil
+      scene_image = response[:scene_images]&.first
+
+      if scene_image
+        backdrop = scene_image[:image_files].find{ |x| x[:url].include?('original') }&.dig(:url) 
+        backdrop['http://'] = 'https://' if backdrop
+      end
+      
+      backdrop
+    end
+
     def showtime_dimension(showtime)
       return '3D' if showtime[:is_3d]
       return 'IMAX' if showtime[:is_imax]
       return 'IMAX 3D' if showtime[:is_3d] && showtime[:is_imax]
       '2D'
+    end
+    
+    def backdrop_min_url(response)
+      backdrop_min = nil
+      scene_image = response[:scene_images]&.first
+      if scene_image
+        backdrop_min = scene_image[:image_files].find{ |x| x[:url].include?('w780') }&.dig(:url) 
+        backdrop_min['http://'] = 'https://' if backdrop_min
+      end
+      
+      backdrop_min
+    end
+
+    def thumbnail_url(response)
+      thumbnail = nil
+      thumbnail = response.dig(:poster_image, :image_files)&.find{ |x| x[:url].include?('w342') }&.dig(:url)
+      thumbnail['http://'] = 'https://' if thumbnail
+      
+      thumbnail
+    end
+
+    def poster_url(response)
+      poster = nil
+      poster = response.dig(:poster_image, :image_files)&.find{ |x| x[:url].include?('original') }&.dig(:url)
+      poster['http://'] = 'https://' if poster
+      
+      poster
+    end
+
+    def save_ratings(movie, response)
+      response[:ratings]&.each do |is_rating|
+        movie.ratings.find_or_create_by(name: is_rating[0]) do |new_rating|
+          new_rating.value = is_rating[1][:value]
+          new_rating.vote_count = is_rating[1][:vote_count]
+        end
+      end
+    end
+
+    def save_movie_genres(movie, response)
+      response[:genres].each do |is_genre|
+        genre = Genre.find_or_create_by(external_id: is_genre[:id])
+        MovieGenre.find_or_create_by!(genre: genre, movie: movie)
+      end
+    end
+
+    def save_trailers(movie, response)
+      response[:trailers]&.each do |trailer|
+        file = trailer[:trailer_files][0]
+        movie.trailers.find_or_create_by(format: file[:format], url: file[:url], language: trailer[:language]) do |new_trailer|
+          new_trailer.transfert = file[:transfert]
+        end
+      end
+    end
+
+    def save_casts(movie, response)
+      response[:cast]&.first(5)&.each do |cast|
+        person = Person.find_or_create_by(external_id: cast[:id], name: cast[:name])
+        movie.casts.find_or_create_by(external_id: cast[:id], name: cast[:name], character: cast[:character], person: person)
+      end
+    end
+
+    def save_directors(movie, response)
+      response[:crew]&.select{ |crew| crew[:job] == 'director' }&.each do |crew|
+        person = Person.find_or_create_by(external_id: crew[:id], name: crew[:name])
+        movie.directors.find_or_create_by(external_id: crew[:id], name: crew[:name], person: person)
+      end
+    end
+
+    def save_release_date(movie, country, response)
+      if release_date = response[:release_dates]&.find{ |date| date[0][country.iso_code] }
+        MovieCountry.find_or_create_by(movie: movie, country: country, release_date: release_date[1][0][:date], iso_code: country.iso_code)
+      end
     end
   end
 end

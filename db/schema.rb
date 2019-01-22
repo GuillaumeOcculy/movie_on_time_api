@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_125541) do
+ActiveRecord::Schema.define(version: 2019_01_22_133710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "casts", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.bigint "person_id"
+    t.string "external_id"
+    t.string "name"
+    t.string "character"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_casts_on_movie_id"
+    t.index ["person_id"], name: "index_casts_on_person_id"
+  end
 
   create_table "chain_countries", force: :cascade do |t|
     t.bigint "chain_id"
@@ -77,11 +89,57 @@ ActiveRecord::Schema.define(version: 2019_01_22_125541) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "directors", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.bigint "person_id"
+    t.string "external_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_directors_on_movie_id"
+    t.index ["person_id"], name: "index_directors_on_person_id"
+  end
+
   create_table "genres", force: :cascade do |t|
     t.string "external_id"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "movie_countries", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.bigint "country_id"
+    t.date "release_date"
+    t.string "iso_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_movie_countries_on_country_id"
+    t.index ["iso_code", "release_date"], name: "index_movie_countries_on_iso_code_and_release_date"
+    t.index ["movie_id", "iso_code"], name: "index_movie_countries_on_movie_id_and_iso_code"
+    t.index ["movie_id"], name: "index_movie_countries_on_movie_id"
+    t.index ["release_date"], name: "index_movie_countries_on_release_date"
+  end
+
+  create_table "movie_genres", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.bigint "genre_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["genre_id"], name: "index_movie_genres_on_genre_id"
+    t.index ["movie_id"], name: "index_movie_genres_on_movie_id"
+  end
+
+  create_table "movie_translations", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.string "language"
+    t.string "title"
+    t.string "synopsis"
+    t.string "poster_url"
+    t.string "thumbnail_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_movie_translations_on_movie_id"
   end
 
   create_table "movies", force: :cascade do |t|
@@ -98,6 +156,23 @@ ActiveRecord::Schema.define(version: 2019_01_22_125541) do
     t.string "backdrop_min_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "people", force: :cascade do |t|
+    t.string "external_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.string "name"
+    t.decimal "value"
+    t.integer "vote_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_ratings_on_movie_id"
   end
 
   create_table "showtimes", force: :cascade do |t|
@@ -123,11 +198,33 @@ ActiveRecord::Schema.define(version: 2019_01_22_125541) do
     t.index ["movie_id"], name: "index_showtimes_on_movie_id"
   end
 
+  create_table "trailers", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.string "language"
+    t.string "format"
+    t.string "transfert"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_trailers_on_movie_id"
+  end
+
+  add_foreign_key "casts", "movies"
+  add_foreign_key "casts", "people"
   add_foreign_key "chain_countries", "chains"
   add_foreign_key "chain_countries", "countries"
   add_foreign_key "cinemas", "chains"
   add_foreign_key "cinemas", "countries"
   add_foreign_key "cities", "countries"
+  add_foreign_key "directors", "movies"
+  add_foreign_key "directors", "people"
+  add_foreign_key "movie_countries", "countries"
+  add_foreign_key "movie_countries", "movies"
+  add_foreign_key "movie_genres", "genres"
+  add_foreign_key "movie_genres", "movies"
+  add_foreign_key "movie_translations", "movies"
+  add_foreign_key "ratings", "movies"
   add_foreign_key "showtimes", "cinemas"
   add_foreign_key "showtimes", "movies"
+  add_foreign_key "trailers", "movies"
 end

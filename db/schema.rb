@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_120819) do
+ActiveRecord::Schema.define(version: 2019_01_22_125541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,9 +100,34 @@ ActiveRecord::Schema.define(version: 2019_01_22_120819) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "showtimes", force: :cascade do |t|
+    t.bigint "cinema_id"
+    t.bigint "movie_id"
+    t.string "external_id"
+    t.date "start_date"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.string "language"
+    t.string "subtitle_language"
+    t.string "auditorium"
+    t.string "dimension", default: "2D"
+    t.string "country_code"
+    t.string "booking_type"
+    t.string "booking_link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cinema_id", "country_code"], name: "index_showtimes_on_cinema_id_and_country_code"
+    t.index ["cinema_id"], name: "index_showtimes_on_cinema_id"
+    t.index ["movie_id", "country_code"], name: "index_showtimes_on_movie_id_and_country_code"
+    t.index ["movie_id", "start_at"], name: "index_showtimes_on_movie_id_and_start_at"
+    t.index ["movie_id"], name: "index_showtimes_on_movie_id"
+  end
+
   add_foreign_key "chain_countries", "chains"
   add_foreign_key "chain_countries", "countries"
   add_foreign_key "cinemas", "chains"
   add_foreign_key "cinemas", "countries"
   add_foreign_key "cities", "countries"
+  add_foreign_key "showtimes", "cinemas"
+  add_foreign_key "showtimes", "movies"
 end

@@ -7,6 +7,8 @@ module Api::InternationalShowtimes
       save_chains
       save_cinemas
       save_upcoming_movies
+      purge_old_showtimes
+      save_showtimes
     end
 
     # Api::InternationalShowtimes::Import.new.save_genres
@@ -67,6 +69,44 @@ module Api::InternationalShowtimes
       upcoming_movies(country: country).each do |movie|
         new_movie = Movie.find_or_create_by!(external_id: movie[:id])
       end
+    end
+
+    # Api::InternationalShowtimes::Import.new.save_showtimes
+    def save_showtimes
+      Cinema.all.each do |cinema|
+        response = showtimes(cinema.external_id)
+        response.each do |showtime|
+          movie = Movie.find_or_create_by!(external_id: showtime[:movie_id])
+          cinema.showtimes.find_or_create_by!(external_id: showtime[:id], movie: movie) do |new_showtime|
+            new_showtime.start_at = showtime[:start_at].in_time_zone('Paris').strftime("%Y-%m-%dT%H:%M:00")
+            new_showtime.start_date = new_showtime.start_at.to_date
+            new_showtime.end_at = new_showtime.start_at + movie.running_time * 60 if movie.running_time
+            new_showtime.language = showtime[:language]
+            new_showtime.subtitle_language = showtime[:subtitle_language]
+            new_showtime.auditorium = showtime[:auditorium]
+            new_showtime.dimension = showtime_dimension(showtime)
+            new_showtime.booking_type = showtime[:booking_type]
+            new_showtime.booking_link = showtime[:booking_link]
+            new_showtime.country_code = @country.iso_code
+          end 
+        end
+      end
+    end
+
+    # Showtimes we can't find anymore on the API
+    # Api::InternationalShowtimes::Import.new.purge_old_showtimes
+    def purge_old_showtimes
+      Showtime.upcoming.each do |showtime|
+        response = showtime_details(showtime.external_id)
+        showtime.destroy if response.dig(:error, :code) == 10007
+      end
+    end
+
+    def showtime_dimension(showtime)
+      return '3D' if showtime[:is_3d]
+      return 'IMAX' if showtime[:is_imax]
+      return 'IMAX 3D' if showtime[:is_3d] && showtime[:is_imax]
+      '2D'
     end
   end
 end

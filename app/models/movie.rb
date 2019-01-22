@@ -22,4 +22,7 @@ class Movie < ApplicationRecord
   # Scopes
   scope :draft, -> { where(original_title: nil) }
   scope :ready, -> { where.not(original_title: nil) }
+  scope :dont_have_images, -> {includes(:movie_translations).where(movie_translations: { poster_url: nil } )}
+  scope :have_tmdb_id, -> { where.not(tmdb_id: nil) }
+  scope :dont_have_trailers_in, -> (language) { have_tmdb_id.select{ |x| x.trailers.where(language: language).empty? } }
 end

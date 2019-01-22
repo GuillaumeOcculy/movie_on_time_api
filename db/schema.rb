@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_113926) do
+ActiveRecord::Schema.define(version: 2019_01_22_120819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,22 @@ ActiveRecord::Schema.define(version: 2019_01_22_113926) do
   create_table "genres", force: :cascade do |t|
     t.string "external_id"
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "movies", force: :cascade do |t|
+    t.string "external_id"
+    t.string "original_title"
+    t.string "original_language"
+    t.string "imdb_id"
+    t.string "tmdb_id"
+    t.string "rentrak_film_id"
+    t.integer "running_time"
+    t.string "status"
+    t.string "website"
+    t.string "backdrop_url"
+    t.string "backdrop_min_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

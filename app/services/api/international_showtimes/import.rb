@@ -6,6 +6,7 @@ module Api::InternationalShowtimes
       save_cities
       save_chains
       save_cinemas
+      save_upcoming_movies
     end
 
     # Api::InternationalShowtimes::Import.new.save_genres
@@ -58,6 +59,13 @@ module Api::InternationalShowtimes
         new_cinema.booking_type = cinema[:location][:booking_type]
         new_cinema.image_url = cinema[:location][:image_url]
         new_cinema.save
+      end
+    end
+
+    # Api::InternationalShowtimes::Import.new.save_upcoming_movies
+    def save_upcoming_movies(country: 'FR')
+      upcoming_movies(country: country).each do |movie|
+        new_movie = Movie.find_or_create_by!(external_id: movie[:id])
       end
     end
   end

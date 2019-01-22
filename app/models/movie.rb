@@ -28,7 +28,10 @@ class Movie < ApplicationRecord
 
   scope :order_by_title, -> (language = 'fr') { includes(:movie_translations).where(movie_translations: {language: language}).order('movie_translations.title ASC') }
   scope :recent,    -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date DESC').order_by_title }
+  scope :old,       -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date ASC').order_by_title }
+  
   scope :live, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date <= :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).recent(iso_code) }
+  scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries, :movie_translations).merge(MovieCountry.upcoming(iso_code: iso_code)).distinct.old(iso_code) }
 
   # Methods
   def title(language = 'fr')

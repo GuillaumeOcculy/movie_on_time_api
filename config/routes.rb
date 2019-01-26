@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     get :reprojection,   to: 'movies#reprojection'
 
     resources :movies, only: [:index, :show]
+    resources :showtimes, only: :show
   end
 end

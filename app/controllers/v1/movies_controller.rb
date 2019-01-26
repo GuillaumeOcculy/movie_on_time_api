@@ -21,6 +21,7 @@ class V1::MoviesController < ApplicationController
 
   def show
     movie = Movie.find(params[:id])
-    render json: MovieSerializer.new(movie, include: [:directors, :casts, :trailers, :genres]).serialized_json
+    date = movie.first_live_showtime&.start_date
+    render json: MovieSerializer.new(movie, params: {movie_id: movie.id, date: date}, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
   end
 end

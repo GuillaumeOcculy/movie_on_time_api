@@ -7,7 +7,8 @@ Rails.application.routes.draw do
     get :premiere,       to: 'movies#premiere'
     get :reprojection,   to: 'movies#reprojection'
 
-    resources :movies, only: [:index, :show]
+    resources :movies,    only: [:index, :show]
+    resources :cinemas,   only: [:index]
     resources :showtimes, only: :show
   end
 end

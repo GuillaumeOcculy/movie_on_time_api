@@ -11,6 +11,7 @@ class Cinema < ApplicationRecord
 
   # Scopes
   scope :order_by_name,     -> { order(:name) }
-  scope :by_country,        -> (iso_code) { where(country_code: iso_code)}
+  scope :by_country,        -> (iso_code) { where(country_code: iso_code) }
+  scope :in_paris,          -> { where(city: 'Paris').order_by_name }
   scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: {start_date: date}).order_by_name }
 end

@@ -15,6 +15,7 @@ gem 'config'
 gem 'httparty'
 gem 'versionist'
 gem 'fast_jsonapi'
+gem 'rails_param'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

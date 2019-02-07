@@ -1,6 +1,13 @@
 class V1::CinemasController < ApplicationController
   def index
-    cinemas = Cinema.in_paris
+    param! :query, String
+
+    if params[:query]
+      cinemas = Cinema.in_france.search(params[:query])
+    else
+      cinemas = Cinema.in_france.order_by_name
+    end
+
     render json: CinemaItemSerializer.new(cinemas).serialized_json
   end
 

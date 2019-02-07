@@ -10,6 +10,7 @@ class Showtime < ApplicationRecord
   scope :ordered_by_date,                 -> { order(start_at: :asc) }
   scope :upcoming,                        -> { where("start_at > ?", Time.now).ordered_by_date }
   scope :by_movie_and_date,               -> (movie_id: movie_id, date: Date.today) { where(movie_id: movie_id, start_date: date).ordered_by_date }
+  scope :by_cinema_and_date,              -> (cinema_id: cinema_id, date: Date.today) { where(cinema_id: cinema_id, start_date: date).ordered_by_date }
 
   # Methods
   def start_time

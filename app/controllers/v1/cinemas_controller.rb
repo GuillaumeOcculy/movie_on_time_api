@@ -1,4 +1,4 @@
-class V1::CinemasController < ApplicationController
+class V1::CinemasController < V1::BaseController
   def index
     param! :query, String
 

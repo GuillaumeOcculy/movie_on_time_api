@@ -1,6 +1,6 @@
 class V1::MoviesController < V1::BaseController
   before_action :check_params, except: :show
-  
+
   def index
     movies = paginate Movie.live.joins(:showtimes).search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
@@ -37,10 +37,10 @@ class V1::MoviesController < V1::BaseController
   end
 
   def selected_date
-    params[:date] if params[:date].present? 
+    params[:date] if params[:date].present?
   end
 
   def selected_query
-    params[:query] if params[:query].present? 
+    params[:query] if params[:query].present?
   end
 end

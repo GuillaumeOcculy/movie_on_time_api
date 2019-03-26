@@ -7,7 +7,7 @@ class V1::MoviesController < V1::BaseController
   end
 
   def upcoming
-    movies = paginate MoviesControllerovie.upcoming.search(params[:query])
+    movies = paginate Movie.upcoming.search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 

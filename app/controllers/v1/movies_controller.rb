@@ -1,21 +1,23 @@
 class V1::MoviesController < V1::BaseController
+  before_action :check_params, except: :show
+  
   def index
-    movies = paginate Movie.live.joins(:showtimes)
+    movies = paginate Movie.live.joins(:showtimes).search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 
   def upcoming
-    movies = paginate MoviesControllerovie.upcoming
+    movies = paginate MoviesControllerovie.upcoming.search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 
   def premiere
-    movies = paginate Movie.premiere
+    movies = paginate Movie.premiere.search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 
   def reprojection
-    movies = paginate Movie.reprojection
+    movies = paginate Movie.reprojection.search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 
@@ -29,6 +31,11 @@ class V1::MoviesController < V1::BaseController
   end
 
   private
+  def check_params
+    param! :page, String
+    param! :query, String
+  end
+
   def selected_date
     params[:date] if params[:date].present? 
   end

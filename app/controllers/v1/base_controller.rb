@@ -1,6 +1,8 @@
 class V1::BaseController < ApplicationController
   include Rails::Pagination
 
+    WillPaginate.per_page = 32
+
   private
   def meta_attributes(collection, extra_meta = {})
     {

@@ -8,7 +8,8 @@ class V1::CinemasController < V1::BaseController
       cinemas = Cinema.in_france.order_by_name
     end
 
-    render json: CinemaItemSerializer.new(cinemas).serialized_json
+    cinemas = paginate cinemas
+    render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas)).serialized_json
   end
 
   def show

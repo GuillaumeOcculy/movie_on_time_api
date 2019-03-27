@@ -13,10 +13,6 @@ class MovieSerializer
   has_many :trailers
   has_many :genres
   has_many :cinemas, serializer: CinemaItemSerializer do |object, params|
-    if params[:query]
-      object.cinemas.in_france.search(params[:query]).by_showtimes_date(date: params[:date])
-    else
-      object.cinemas.in_france.by_showtimes_date(date: params[:date])
-    end
+    object.cinemas.where(id: params[:cinema_ids])
   end
 end

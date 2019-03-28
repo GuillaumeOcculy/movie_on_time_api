@@ -33,10 +33,10 @@ class V1::MoviesController < V1::BaseController
       movie.cinemas.in_france.by_showtimes_date(date: date)
     end
 
-    cinemas = paginate(cinemas, per_page: 2)
+    cinemas = paginate cinemas
     cinema_ids = cinemas.map(&:id)
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { cinema_ids: cinema_ids }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
   end
 
   private

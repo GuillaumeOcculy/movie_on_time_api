@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   api_version(:module => 'V1', :path => {:value => 'v1'}, :defaults => {:format => 'json'}, :default => true) do
     root 'movies#index'
 
+    get :search,         to: 'movies#search'
     get :upcoming,       to: 'movies#upcoming'
     get :premiere,       to: 'movies#premiere'
     get :reprojection,   to: 'movies#reprojection'

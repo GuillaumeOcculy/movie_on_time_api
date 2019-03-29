@@ -6,6 +6,13 @@ class V1::MoviesController < V1::BaseController
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
   end
 
+  def search
+    param! :q, String
+
+    movies = Movie.search(params[:q])
+    render json: MovieItemSerializer.new(movies).serialized_json
+  end
+
   def upcoming
     movies = paginate Movie.upcoming.search(params[:query])
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json

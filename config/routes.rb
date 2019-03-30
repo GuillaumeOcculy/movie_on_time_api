@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   api_version(:module => 'V1', :path => {:value => 'v1'}, :defaults => {:format => 'json'}, :default => true) do
+
     root 'movies#index'
 
     get :search,         to: 'movies#search'
@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get :premiere,       to: 'movies#premiere'
     get :reprojection,   to: 'movies#reprojection'
 
+    resources :users,     only: :create
     resources :movies,    only: [:index, :show]
     resources :cinemas,   only: [:index, :show]
     resources :showtimes, only: :show

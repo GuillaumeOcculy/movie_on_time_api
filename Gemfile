@@ -21,6 +21,9 @@ gem 'rails_param'
 gem 'api-pagination'
 gem 'will_paginate'
 
+# Authentification
+gem 'devise'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
     root 'movies#index'
 
+    post :auth,           to: 'authentication#create'
+
     get :search,         to: 'movies#search'
     get :upcoming,       to: 'movies#upcoming'
     get :premiere,       to: 'movies#premiere'

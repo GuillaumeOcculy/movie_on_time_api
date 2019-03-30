@@ -23,6 +23,7 @@ gem 'will_paginate'
 
 # Authentification
 gem 'devise'
+gem 'jwt'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

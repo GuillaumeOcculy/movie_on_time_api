@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
     resource :watchlist,  only: [:show, :create, :destroy]
     resource :favorite_cinema,  only: [:show, :create, :destroy]
+    resource :watched_movies,  only: [:show, :create, :destroy]
 
     resources :cinemas,   only: [:index, :show]
     resources :showtimes, only: :show

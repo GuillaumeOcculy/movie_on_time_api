@@ -40,10 +40,17 @@ class V1::MoviesController < V1::BaseController
       movie.cinemas.in_france.by_showtimes_date(date: date)
     end
 
-    cinemas = paginate cinemas
-    cinema_ids = cinemas.map(&:id)
+    if @current_user
+      favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.map(&:id))
+      cinemas = cinemas.where.not(id: favorite_cinemas)
+    end
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
+    cinemas = paginate cinemas
+
+    cinema_ids = cinemas.map(&:id)
+    favorite_cinema_ids = favorite_cinemas&.map(&:id) || []
+
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
   end
 
   private

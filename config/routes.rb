@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
     resources :users,     only: :create
     resources :movies,    only: [:index, :show]
+
+    resource :watchlist,  only: [:show, :create, :destroy]
+
     resources :cinemas,   only: [:index, :show]
     resources :showtimes, only: :show
   end

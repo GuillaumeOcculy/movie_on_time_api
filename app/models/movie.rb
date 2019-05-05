@@ -16,6 +16,9 @@ class Movie < ApplicationRecord
 
   has_many :movie_translations, dependent: :destroy
 
+  has_many :watchlist_movies, dependent: :destroy
+  has_many :watchlisted_by_users, through: :watchlist_movies, source: :user
+
   # Validations
   validates :external_id, presence: true, uniqueness: true
 

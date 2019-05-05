@@ -8,6 +8,10 @@ class CinemaSerializer
     params[:date]
   end
 
+  attribute :favorited do |object, params|
+    object.favorited?(params[:current_user]) if params[:current_user]
+  end
+
   has_many :movies, serializer: Cinema::MovieItemSerializer do |object, params|
     object.movies.by_showtimes_date(date: params[:date])
   end

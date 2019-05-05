@@ -6,6 +6,9 @@ class Cinema < ApplicationRecord
   has_many :showtimes,      -> { where('start_date >= ?', Date.today) }, dependent: :destroy
   has_many :movies,         -> { distinct }, through: :showtimes
 
+  has_many :favorite_cinemas, dependent: :destroy
+  has_many :favorited_by_users, through: :favorite_cinemas, source: :user
+
   # Validations
   validates_presence_of :external_id, :name
 
@@ -24,5 +27,9 @@ class Cinema < ApplicationRecord
 
   def showtime_dates
     showtimes.ordered_by_date.pluck(:start_date).uniq.first(7)
+  end
+
+  def favorited?(user)
+    favorited_by_users.exists?(user.id)
   end
 end

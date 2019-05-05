@@ -9,7 +9,7 @@ class V1::CinemasController < V1::BaseController
     end
 
     cinemas = paginate cinemas
-    render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas)).serialized_json
+    render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), current_user: @current_user).serialized_json
   end
 
   def show
@@ -17,6 +17,6 @@ class V1::CinemasController < V1::BaseController
     
     cinema = Cinema.find(params[:id])
     date = params[:date] || cinema.first_live_showtime&.start_date
-    render json: CinemaSerializer.new(cinema, params: {cinema_id: cinema.id, date: date}, include: [:movies]).serialized_json
+    render json: CinemaSerializer.new(cinema, params: {cinema_id: cinema.id, date: date, current_user: @current_user}, include: [:movies]).serialized_json
   end
 end

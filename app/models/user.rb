@@ -8,6 +8,9 @@ class User < ApplicationRecord
   has_many :watchlist_movies, dependent: :destroy
   has_many :watchlisted_movies, through: :watchlist_movies, source: :movie
 
+  has_many :favorite_cinemas, dependent: :destroy
+  has_many :favorited_cinemas, through: :favorite_cinemas, source: :cinema
+
   def token
     JsonWebToken.encode(sub: id)
   end

@@ -19,6 +19,9 @@ class Movie < ApplicationRecord
   has_many :watchlist_movies, dependent: :destroy
   has_many :watchlisted_by_users, through: :watchlist_movies, source: :user
 
+  has_many :watched_movies, dependent: :destroy
+  has_many :watched_by_users, through: :watched_movies, source: :user
+
   # Validations
   validates :external_id, presence: true, uniqueness: true
 
@@ -55,6 +58,7 @@ class Movie < ApplicationRecord
 
     Movie.where(id: movie_ids).old_premiere
   end
+
   # Methods
   def title(language = 'fr')
     movie_translations.find_by(language: language)&.title || original_title
@@ -86,5 +90,13 @@ class Movie < ApplicationRecord
 
   def showtime_dates
     showtimes.ordered_by_date.pluck(:start_date).uniq.first(7)
+  end
+
+  def watchlisted?(user)
+    watchlisted_by_users.exists?(user.id)
+  end
+
+  def watched?(user)
+    watched_by_users.exists?(user.id)
   end
 end

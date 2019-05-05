@@ -3,6 +3,8 @@ class V1::BaseController < ApplicationController
 
   WillPaginate.per_page = 32
 
+  before_action :authenticate_user
+
   private
   def invalid_resource!(errors = [])
     api_error(status: 422, errors: errors)
@@ -38,5 +40,10 @@ class V1::BaseController < ApplicationController
 
    def auth_token
     @auth_token ||= request.headers.fetch('Authorization', '').split(' ').last
+  end
+
+  def authenticate_user
+    return unless auth_token
+    authenticate_token! 
   end
 end

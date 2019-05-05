@@ -8,6 +8,14 @@ class MovieSerializer
     params[:date]
   end
 
+  attribute :watchlisted do |object, params|
+    object.watchlisted?(params[:current_user]) if params[:current_user]
+  end
+
+  attribute :watched do |object, params|
+    object.watched?(params[:current_user]) if params[:current_user]
+  end
+
   has_many :directors
   has_many :casts
   has_many :trailers

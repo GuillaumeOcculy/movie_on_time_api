@@ -3,29 +3,29 @@ class V1::MoviesController < V1::BaseController
 
   def index
     movies = paginate Movie.live.joins(:showtimes).search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end
 
   def search
     param! :q, String
 
     movies = Movie.search(params[:q])
-    render json: MovieItemSerializer.new(movies).serialized_json
+    render json: MovieItemSerializer.new(movies, params: { current_user: @current_user } ).serialized_json
   end
 
   def upcoming
     movies = paginate Movie.upcoming.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end
 
   def premiere
     movies = paginate Movie.premiere.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end
 
   def reprojection
     movies = paginate Movie.reprojection.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end
 
   def show
@@ -43,7 +43,7 @@ class V1::MoviesController < V1::BaseController
     cinemas = paginate cinemas
     cinema_ids = cinemas.map(&:id)
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user }, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
   end
 
   private

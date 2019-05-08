@@ -25,6 +25,9 @@ gem 'will_paginate'
 gem 'devise'
 gem 'jwt'
 
+# Cron
+gem 'whenever', require: false
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 

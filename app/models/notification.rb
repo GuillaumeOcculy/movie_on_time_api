@@ -10,7 +10,17 @@ class Notification < ApplicationRecord
   # Validations
   validates_presence_of :action
 
+  # Callbacks
+  after_create_commit :send_notification_mailer
+
    # Scopes
-  scope :unread,  -> { where(read_at: nil) }
+  scope :unread,  -> { where(read_at: nil).order(read_at: :desc) }
   scope :read,    -> { where.not(read_at: nil).order(read_at: :desc) }
+
+  private
+  def send_notification_mailer
+    case action
+    when 'movie_released'; then NotificationsMailer.movie_released(recipient, notifiable).deliver_later
+    end
+  end
 end

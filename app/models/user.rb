@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :favorite_cinemas, dependent: :destroy
   has_many :favorited_cinemas, through: :favorite_cinemas, source: :cinema
 
+  has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+
   def token
     JsonWebToken.encode(sub: id)
   end

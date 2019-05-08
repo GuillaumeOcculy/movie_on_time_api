@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_05_183609) do
+ActiveRecord::Schema.define(version: 2019_05_08_182501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,20 @@ ActiveRecord::Schema.define(version: 2019_05_05_183609) do
     t.string "backdrop_min_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "recipient_id"
+    t.string "actorable_type"
+    t.bigint "actorable_id"
+    t.string "notifiable_type"
+    t.bigint "notifiable_id"
+    t.datetime "read_at"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actorable_type", "actorable_id"], name: "index_notifications_on_actorable_type_and_actorable_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
   end
 
   create_table "people", force: :cascade do |t|

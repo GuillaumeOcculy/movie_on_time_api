@@ -9,13 +9,14 @@ class V1::WatchedMoviesController < V1::BaseController
     movies ||= @current_user.movies_watched
   
     movies = paginate movies
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end
 
   def create
     param! :movie_id, Integer
 
     @current_user.watched_movies.find_or_create_by(movie_id: params[:movie_id])
+    @current_user.watchlist_movies.where(movie_id: params[:movie_id]).delete_all
 
     render json: {}, status: :created
   end

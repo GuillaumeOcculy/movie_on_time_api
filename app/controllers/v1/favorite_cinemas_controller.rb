@@ -5,11 +5,11 @@ class V1::FavoriteCinemasController < V1::BaseController
     param! :page, String
     param! :query, String
 
-    movies = @current_user.favorited_cinemas.search(params[:q]) if params[:q]
-    movies ||= @current_user.favorited_cinemas
+    cinemas = @current_user.favorited_cinemas.search(params[:q]) if params[:q]
+    cinemas ||= @current_user.favorited_cinemas
   
-    movies = paginate movies
-    render json: CinemaItemSerializer.new(movies, meta: meta_attributes(movies)).serialized_json
+    cinemas = paginate cinemas
+    render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), params: {current_user: @current_user}).serialized_json
   end
 
   def create

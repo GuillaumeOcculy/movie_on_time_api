@@ -3,29 +3,39 @@ class V1::MoviesController < V1::BaseController
 
   def index
     movies = paginate Movie.live.joins(:showtimes).search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
+    genres = { genres: movies.includes(:genres).pluck('genres.name').uniq }
+
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies, genres), params: { current_user: @current_user }).serialized_json
   end
 
   def search
     param! :q, String
 
-    movies = Movie.search(params[:q])
-    render json: MovieItemSerializer.new(movies, params: { current_user: @current_user } ).serialized_json
+    movies = paginate Movie.search(params[:q])
+    genres = { genres: movies.includes(:genres).pluck('genres.name').uniq }
+
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies, genres), params: { current_user: @current_user }).serialized_json
   end
 
   def upcoming
     movies = paginate Movie.upcoming.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
+    genres = { genres: movies.includes(:genres).pluck('genres.name').uniq }
+
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies, genres), params: { current_user: @current_user }).serialized_json
   end
 
   def premiere
     movies = paginate Movie.premiere.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
+    genres = { genres: movies.includes(:genres).pluck('genres.name').uniq }
+
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies, genres), params: { current_user: @current_user }).serialized_json
   end
 
   def reprojection
     movies = paginate Movie.reprojection.search(params[:query])
-    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
+    genres = { genres: movies.includes(:genres).pluck('genres.name').uniq }
+
+    render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies, genres), params: { current_user: @current_user }).serialized_json
   end
 
   def show

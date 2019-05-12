@@ -42,7 +42,7 @@ class Movie < ApplicationRecord
   scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: {start_date: date}).recent }
   
   scope :live, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date <= :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).recent(iso_code) }
-  scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries, :movie_translations).merge(MovieCountry.upcoming(iso_code: iso_code)).distinct.old(iso_code) }
+  scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date > :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).recent(iso_code) }
   scope :reprojection, -> (iso_code: 'FR') do
     movie_ids = joins(:movie_countries, :cinemas).merge(MovieCountry.reprojection(iso_code: iso_code)).merge(Cinema.by_country(iso_code)).distinct
     Movie.includes(:movie_translations).where(id: movie_ids).old_premiere

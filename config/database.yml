@@ -81,5 +81,4 @@ test:
 production:
   <<: *default
   database: movie_on_time_api_production
-  username: movie_on_time_api
-  password: <%= ENV['MOVIE_ON_TIME_API_DATABASE_PASSWORD'] %>
+  username: guillaume

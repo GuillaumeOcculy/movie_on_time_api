@@ -9,7 +9,7 @@ class V1::CinemasController < V1::BaseController
     end
 
     cinemas = paginate cinemas
-        render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), params: {current_user: @current_user}).serialized_json
+    render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), params: {current_user: @current_user}).serialized_json
   end
 
   def show

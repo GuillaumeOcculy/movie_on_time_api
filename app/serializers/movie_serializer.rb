@@ -22,10 +22,10 @@ class MovieSerializer
   has_many :genres
   
   has_many :cinemas, serializer: CinemaItemSerializer do |object, params|
-    object.cinemas.where(id: params[:cinema_ids])
+    object.cinemas.where(id: params[:cinema_ids]).order_by_name
   end
 
   has_many :favorited_cinemas, serializer: CinemaItemSerializer do |object, params|
-    object.cinemas.where(id: params[:favorite_cinema_ids])
+    object.cinemas.where(id: params[:favorite_cinema_ids]).order_by_name
   end
 end

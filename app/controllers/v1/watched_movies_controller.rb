@@ -6,7 +6,7 @@ class V1::WatchedMoviesController < V1::BaseController
     param! :query, String
 
     movies = @current_user.movies_watched.search(params[:q]) if params[:q]
-    movies ||= @current_user.movies_watched
+    movies ||= @current_user.movies_watched.recent
   
     movies = paginate movies
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json

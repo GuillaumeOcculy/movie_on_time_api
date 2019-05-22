@@ -1,13 +1,13 @@
 Rails.application.configure do
-  # config.after_initialize do
-  #   Bullet.enable        = true
-  #   Bullet.alert         = true
-  #   Bullet.bullet_logger = true
-  #   Bullet.console       = true
-  # # Bullet.growl         = true
-  #   Bullet.rails_logger  = true
-  #   Bullet.add_footer    = true
-  # end  # Settings specified here will take precedence over those in config/application.rb.
+  config.after_initialize do
+    Bullet.enable        = true
+    Bullet.alert         = true
+    Bullet.bullet_logger = true
+    Bullet.console       = true
+  # Bullet.growl         = true
+    Bullet.rails_logger  = true
+    Bullet.add_footer    = true
+  end  # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -30,7 +30,7 @@ Rails.application.configure do
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
-    config.action_controller.perform_caching = false
+    config.action_controller.perform_caching = true
 
     config.cache_store = :null_store
   end

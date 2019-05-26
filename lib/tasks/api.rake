@@ -12,7 +12,7 @@ namespace :api do
     Api::Tmdb::Import.new.perform
   end
 
-  task :clear_cache: :environment do
+  task clear_cache: :environment do
     Rails.cache.clear
   end
 end

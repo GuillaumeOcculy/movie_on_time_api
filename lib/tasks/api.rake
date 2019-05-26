@@ -4,7 +4,15 @@ namespace :api do
     Api::InternationalShowtimes::Import.new.perform
   end
 
+  task purge_old_showtimes: :environment do
+    Api::InternationalShowtimes::Import.new.purge_old_showtimes
+  end
+
   task tmdb_imports: :environment do
     Api::Tmdb::Import.new.perform
+  end
+
+  task :clear_cache: :environment do
+    Rails.cache.clear
   end
 end

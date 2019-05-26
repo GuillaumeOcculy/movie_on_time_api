@@ -7,7 +7,6 @@ module Api::InternationalShowtimes
       save_chains
       save_cinemas
       save_upcoming_movies
-      purge_old_showtimes
       save_showtimes
       save_movie_details
       save_end_at_showtimes

@@ -1,4 +1,6 @@
 class Movie < ApplicationRecord
+  include Cachable
+
   # Associations
   has_many :showtimes,    -> { where 'start_date >= ?', Date.today  }, dependent: :destroy
   has_many :cinemas,      -> { distinct }, through: :showtimes

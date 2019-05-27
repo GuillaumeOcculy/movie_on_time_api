@@ -45,6 +45,9 @@ group :development, :test do
   gem 'letter_opener'
 
   gem 'rspec-rails', '~> 3.8'
+  gem 'shoulda-matchers'
+  gem 'factory_bot_rails', '~> 4.10.0'
+  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 end
 
 group :development do

@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :trackable
 
+  # Associations
   has_many :watchlist_movies, dependent: :destroy
   has_many :watchlisted_movies, through: :watchlist_movies, source: :movie
 
@@ -16,6 +17,7 @@ class User < ApplicationRecord
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
+  # Methods
   def token
     JsonWebToken.encode(sub: id)
   end

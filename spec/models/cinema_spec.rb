@@ -6,11 +6,11 @@ RSpec.describe Cinema, type: :model do
     expect(FactoryBot.build(:cinema)).to be_valid 
   end
 
-  it { should validate_presence_of(:external_id) }
-  it { should validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:external_id) }
+  it { is_expected.to validate_presence_of(:name) }
 
-  it { should have_many(:showtimes) }
-  it { should have_many(:movies) }
-  it { should have_many(:favorite_cinemas) }
-  it { should have_many(:favorited_by_users) }
+  it { is_expected.to have_many(:showtimes) }
+  it { is_expected.to have_many(:movies) }
+  it { is_expected.to have_many(:favorite_cinemas) }
+  it { is_expected.to have_many(:favorited_by_users) }
 end

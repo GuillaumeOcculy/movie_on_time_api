@@ -6,10 +6,10 @@ RSpec.describe Chain, type: :model do
     expect(FactoryBot.build(:chain)).to be_valid 
   end
 
-  it { should validate_presence_of(:external_id) }
-  it { should validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:external_id) }
+  it { is_expected.to validate_presence_of(:name) }
 
-  it { should have_many(:chain_countries) }
-  it { should have_many(:countries) }
-  it { should have_many(:cinemas) }
+  it { is_expected.to have_many(:chain_countries) }
+  it { is_expected.to have_many(:countries) }
+  it { is_expected.to have_many(:cinemas) }
 end

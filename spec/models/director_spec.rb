@@ -6,9 +6,9 @@ RSpec.describe Director, type: :model do
     expect(FactoryBot.build(:director)).to be_valid 
   end
 
-  it { should validate_presence_of(:external_id) }
-  it { should validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:external_id) }
+  it { is_expected.to validate_presence_of(:name) }
 
-  it { should belong_to(:movie) }
-  it { should belong_to(:person) }
+  it { is_expected.to belong_to(:movie) }
+  it { is_expected.to belong_to(:person) }
 end

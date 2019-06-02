@@ -6,9 +6,9 @@ RSpec.describe Country, type: :model do
     expect(FactoryBot.build(:country)).to be_valid 
   end
 
-  it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:language) }
-  it { should validate_presence_of(:iso_code) }
+  it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:language) }
+  it { is_expected.to validate_presence_of(:iso_code) }
 
-  it { should have_many(:cities) }
+  it { is_expected.to have_many(:cities) }
 end

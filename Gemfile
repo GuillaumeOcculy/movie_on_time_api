@@ -43,6 +43,7 @@ group :development, :test do
   gem 'bullet'
   gem 'pry'
   gem 'letter_opener'
+  gem 'dotenv-rails'
 
   gem 'rspec-rails', '~> 3.8'
   gem 'shoulda-matchers'

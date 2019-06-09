@@ -55,6 +55,7 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
 
   gem 'spring-commands-rspec'
+  gem 'guard-rspec', require: false
 
   gem 'capistrano',         require: false
   gem 'capistrano-rvm',     require: false

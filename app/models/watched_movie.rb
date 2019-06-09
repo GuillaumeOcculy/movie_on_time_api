@@ -7,5 +7,9 @@ class WatchedMovie < ApplicationRecord
   validates_presence_of :watched_date
 
   # Callbacks
-  before_create { self.watched_date ||= Date.today }
+  before_validation :save_watched_date, on: :create
+
+  def save_watched_date
+    self.watched_date ||= Date.today
+  end
 end

@@ -13,7 +13,6 @@ require "capistrano/bundler"
 require "capistrano/rails/migrations"
 require "capistrano/rvm"
 require "capistrano/puma"
-require 'capistrano/dotenv/tasks'
 require 'whenever/capistrano'
 
 install_plugin Capistrano::Puma

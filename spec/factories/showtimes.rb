@@ -3,6 +3,7 @@ FactoryBot.define do
     external_id       { Faker::Alphanumeric.alphanumeric }
     start_date        { Faker::Date.between(2.days.ago, Date.tomorrow) }
     start_at          { Time.new(start_date.year, start_date.month, start_date.day) }
+    language          { 'fr' }
 
     association :movie
     association :cinema

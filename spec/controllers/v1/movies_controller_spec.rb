@@ -9,6 +9,14 @@ RSpec.describe V1::MoviesController, type: :controller do
     Rails.cache.clear
   end
 
+  describe '#show' do
+    it 'responds successfully' do
+      @movie = create(:movie)
+      get :show, params: { id: @movie.id }
+      expect(response).to be_successful
+    end
+  end
+
   describe '#index' do
     before do
       @forrest_gump = create(:movie, :with_showtimes, :with_french_release, :with_translations, original_title: 'Forrest Gump')
@@ -72,11 +80,34 @@ RSpec.describe V1::MoviesController, type: :controller do
     end
   end
 
-  describe '#show' do
+  describe '#premiere' do
+    before do
+      @remember_titans = create(:movie, :with_today_showtimes, :with_french_futur_release, :with_translations, original_title: 'Remember the Titans')
+      @avengers = create(:movie, :with_today_showtimes, :with_french_futur_release, :with_translations, original_title: 'Matrix')
+      @movie_old_showtimes = create(:movie, :with_showtimes, :with_french_futur_release, :with_translations)
+    end
+
     it 'responds successfully' do
-      @movie = create(:movie)
-      get :show, params: { id: @movie.id }
+      get :premiere
       expect(response).to be_successful
+    end
+
+    context 'when params :query is present' do
+      it 'returns the queried live movies' do
+        get :premiere, params: { query: 'titans' }
+        body = JSON.parse response.body
+        movie_ids = body['data'].map {|x| x['id']}
+        expect(movie_ids).to match_array([@remember_titans.id.to_s])
+      end
+    end
+
+    context 'when params :query is absent' do
+      it 'returns the live movies' do
+        get :premiere
+        body = JSON.parse response.body
+        movie_ids = body['data'].map {|x| x['id']}
+        expect(movie_ids).to match_array([@remember_titans.id.to_s, @avengers.id.to_s])
+      end
     end
   end
 end

@@ -7,13 +7,25 @@ FactoryBot.define do
 
     trait :with_french_release do
       after(:create) do |movie|
-        create :movie_country, release_date: Date.today, movie: movie
+        create :movie_country, release_date: Date.today, iso_code: 'FR', movie: movie
+      end
+    end
+
+    trait :with_french_futur_release do
+      after(:create) do |movie|
+        create :movie_country, release_date: Date.tomorrow, iso_code: 'FR', movie: movie
       end
     end
 
     trait :with_showtimes do
       after(:create) do |movie|
         create_list :showtime, 3, start_date: Date.tomorrow, movie: movie
+      end
+    end
+
+    trait :with_today_showtimes do
+      after(:create) do |movie|
+        create_list :showtime, 3, start_date: Date.today, movie: movie
       end
     end
 

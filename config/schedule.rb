@@ -20,11 +20,11 @@ every 1.day, at: '9:30 am' do
 end
 
 every :day, at: '10am' do
-  rake 'api:clear_cache'
+  rake 'api:clear_cache', environment: :production
 end
 
-every :day, at: '10am' do
-  rake 'movie:notify_released'
+every :day, at: '11:30 am' do
+  rake 'movie:notify_released', environment: :production
 end
 
 # Learn more: http://github.com/javan/whenever

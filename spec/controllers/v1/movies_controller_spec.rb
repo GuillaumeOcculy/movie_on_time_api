@@ -39,4 +39,36 @@ RSpec.describe V1::MoviesController, type: :controller do
       end
     end
   end
+
+  describe '#search' do
+    before do
+      @forrest_gump = create(:movie, :with_showtimes, :with_french_release, :with_translations, original_title: 'Forrest Gump')
+      @matrix = create(:movie, :with_showtimes, :with_french_release, :with_translations, original_title: 'Matrix')
+      @movie_old_showtimes = create(:movie, :with_old_showtimes, :with_french_release, :with_translations)
+    end
+
+    it 'responds successfully' do
+      get :search
+      expect(response).to be_successful
+    end
+
+    context 'when params :q is present' do
+      it 'returns the queried live movies' do
+        get :search, params: { q: 'forrest' }
+        body = JSON.parse response.body
+        movie_ids = body['data'].map {|x| x['id']}
+        expect(movie_ids).to match_array([@forrest_gump.id.to_s])
+      end
+    end
+
+    context 'when params :q is absent' do
+      it 'returns the live movies' do
+        get :search
+        body = JSON.parse response.body
+        movie_ids = body['data'].map {|x| x['id']}
+        ids = Movie.live.collect {|x| x['id'].to_s }
+        expect(movie_ids).to match_array(ids)
+      end
+    end
+  end
 end

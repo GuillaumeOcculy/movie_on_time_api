@@ -3,7 +3,9 @@ class V1::MoviesController < V1::BaseController
 
   def index
     movies = Movie.live_cached
+    # binding.pry
     movies = movies.search(params[:query]) if params[:query]
+    # binding.pry
     movies = paginate movies
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json

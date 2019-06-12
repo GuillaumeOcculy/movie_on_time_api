@@ -25,13 +25,15 @@ FactoryBot.define do
 
     trait :with_translations do
       after(:create) do |movie|
-        create_list :movie_translation, 2, movie: movie
+        create :movie_translation, language: 'fr', movie: movie
+        create :movie_translation, language: 'en', movie: movie
       end
     end
 
     trait :with_no_images do
       after(:create) do |movie|
-        create_list :movie_translation, 2, poster_url: nil, movie: movie
+        create :movie_translation, poster_url: nil, language: 'fr', movie: movie
+        create :movie_translation, poster_url: nil, language: 'en', movie: movie
       end
     end
   end

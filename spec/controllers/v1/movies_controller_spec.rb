@@ -22,7 +22,7 @@ RSpec.describe V1::MoviesController, type: :controller do
     end
 
     context 'when params :query is present' do
-      it 'returns the live movies', :focus do
+      it 'returns the queried live movies' do
         get :index, params: { query: 'forrest' }
         body = JSON.parse response.body
         movie_ids = body['data'].map {|x| x['id']}
@@ -31,7 +31,7 @@ RSpec.describe V1::MoviesController, type: :controller do
     end
 
     context 'when params :query is absent' do
-      it 'returns the live movies', :focus do
+      it 'returns the live movies' do
         get :index
         body = JSON.parse response.body
         movie_ids = body['data'].map {|x| x['id']}

@@ -4,5 +4,9 @@ FactoryBot.define do
     last_name     { Faker::Name.last_name }
     email         { Faker::Internet.unique.email }
     password      { Faker::Internet.password }
+
+    trait :invalid do
+      email nil
+    end
   end
 end

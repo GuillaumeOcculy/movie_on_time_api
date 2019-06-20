@@ -11,8 +11,8 @@ RSpec.describe V1::MoviesController, type: :controller do
 
   describe '#show' do
     it 'responds successfully' do
-      @movie = create(:movie)
-      get :show, params: { id: @movie.id }
+      movie = create(:movie)
+      get :show, params: { id: movie.id }
       expect(response).to be_successful
     end
   end

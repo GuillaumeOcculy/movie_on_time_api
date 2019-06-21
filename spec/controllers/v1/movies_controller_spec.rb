@@ -29,16 +29,16 @@ RSpec.describe V1::MoviesController, type: :controller do
       expect(response).to be_successful
     end
 
-    context 'when params :query is present' do
+    context 'when params :q is present' do
       it 'returns the queried live movies' do
-        get :index, params: { query: 'black' }
+        get :index, params: { q: 'black' }
         body = Oj.load response.body
         movie_ids = body['data'].map { |x| x['id'].to_i }
         expect(movie_ids).to match_array([@black_panther.id])
       end
     end
 
-    context 'when params :query is absent' do
+    context 'when params :q is absent' do
       it 'returns the live movies' do
         get :index
         body = Oj.load response.body
@@ -91,9 +91,9 @@ RSpec.describe V1::MoviesController, type: :controller do
       expect(response).to be_successful
     end
 
-    context 'when params :query is present' do
+    context 'when params :q is present' do
       it 'returns the queried upcoming movies', :focus do
-        get :upcoming, params: { query: 'ant' }
+        get :upcoming, params: { q: 'ant' }
         body = Oj.load response.body
         movie_ids = body['data'].map { |x| x['id'].to_i }
 
@@ -101,7 +101,7 @@ RSpec.describe V1::MoviesController, type: :controller do
       end
     end
 
-    context 'when params :query is absent' do
+    context 'when params :q is absent' do
       it 'returns the upcoming movies' do
         get :upcoming
         body = Oj.load response.body
@@ -115,7 +115,7 @@ RSpec.describe V1::MoviesController, type: :controller do
     before do
       @lion_king = create(:movie, :with_today_showtimes, :with_french_futur_release, :with_translations, original_title: 'Roi Lion')
       @joker = create(:movie, :with_today_showtimes, :with_french_futur_release, :with_translations, original_title: 'Matrix')
-      @movie_old_showtimes = create(:movie, :with_showtimes, :with_french_futur_release, :with_translations)
+      @movie_old_showtimes = create(:movie, :with_old_showtimes, :with_french_futur_release, :with_translations)
     end
 
     it 'responds successfully' do
@@ -123,16 +123,16 @@ RSpec.describe V1::MoviesController, type: :controller do
       expect(response).to be_successful
     end
 
-    context 'when params :query is present' do
+    context 'when params :q is present' do
       it 'returns the queried premiere movies' do
-        get :premiere, params: { query: 'lion' }
+        get :premiere, params: { q: 'lion' }
         body = Oj.load response.body
         movie_ids = body['data'].map { |x| x['id'].to_i }
         expect(movie_ids).to match_array([@lion_king.id])
       end
     end
 
-    context 'when params :query is absent' do
+    context 'when params :q is absent' do
       it 'returns the premiere movies' do
         get :premiere
         body = Oj.load response.body
@@ -153,16 +153,16 @@ RSpec.describe V1::MoviesController, type: :controller do
       expect(response).to be_successful
     end
 
-    context 'when params :query is present' do
+    context 'when params :q is present' do
       it 'returns the queried reprojection movies' do
-        get :reprojection, params: { query: 'titans' }
+        get :reprojection, params: { q: 'titans' }
         body = Oj.load response.body
         movie_ids = body['data'].map { |x| x['id'].to_i }
         expect(movie_ids).to match_array([@remember_titans.id])
       end
     end
 
-    context 'when params :query is absent' do
+    context 'when params :q is absent' do
       it 'returns the reprojection movies' do
         get :reprojection
         body = Oj.load response.body

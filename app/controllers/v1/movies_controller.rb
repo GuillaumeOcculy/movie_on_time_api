@@ -3,7 +3,7 @@ class V1::MoviesController < V1::BaseController
 
   def index
     movies = Movie.live_cached
-    movies = movies.search(params[:query]) if params[:query]
+    movies = movies.search(params[:q]) if params[:q]
     movies = paginate movies
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
@@ -19,7 +19,7 @@ class V1::MoviesController < V1::BaseController
 
   def upcoming
     movies = Movie.upcoming_cached
-    movies = movies.search(params[:query]) if params[:query]
+    movies = movies.search(params[:q]) if params[:q]
     movies = paginate movies
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
@@ -27,7 +27,7 @@ class V1::MoviesController < V1::BaseController
 
   def premiere
     movies = Movie.premiere_cached
-    movies = movies.search(params[:query]) if params[:query]
+    movies = movies.search(params[:q]) if params[:q]
     movies = paginate movies
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
@@ -35,7 +35,7 @@ class V1::MoviesController < V1::BaseController
 
   def reprojection
     movies = Movie.reprojection_cached
-    movies = movies.search(params[:query]) if params[:query]
+    movies = movies.search(params[:q]) if params[:q]
     movies = paginate movies
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
@@ -47,8 +47,8 @@ class V1::MoviesController < V1::BaseController
     movie = Movie.find(params[:id])
     date = selected_date || movie.first_live_showtime&.start_date
 
-    cinemas = if params[:query]
-      movie.cinemas.in_france.search(params[:query]).by_showtimes_date(date: date)
+    cinemas = if params[:q]
+      movie.cinemas.in_france.search(params[:q]).by_showtimes_date(date: date)
     else
       movie.cinemas.in_france.by_showtimes_date(date: date)
     end
@@ -69,7 +69,7 @@ class V1::MoviesController < V1::BaseController
   private
   def check_params
     param! :page, String
-    param! :query, String
+    param! :q, String
   end
 
   def selected_date
@@ -77,6 +77,6 @@ class V1::MoviesController < V1::BaseController
   end
 
   def selected_query
-    params[:query] if params[:query].present?
+    params[:q] if params[:q].present?
   end
 end

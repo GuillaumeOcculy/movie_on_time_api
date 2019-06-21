@@ -21,16 +21,16 @@ RSpec.describe V1::CinemasController, type: :controller do
       expect(response).to be_successful
     end
 
-    context 'when params :query is present' do
+    context 'when params :q is present' do
       it 'returns the french queried live movies' do
-        get :index, params: { query: 'bercy' }
+        get :index, params: { q: 'bercy' }
         body = Oj.load response.body
         cinema_ids = body['data'].map { |x| x['id'].to_i }
         expect(cinema_ids).to match_array([@bercy.id])
       end
     end
 
-    context 'when params :query is absent' do
+    context 'when params :q is absent' do
       it 'returns the french live movies' do
         get :index
         body = Oj.load response.body

@@ -13,7 +13,7 @@ FactoryBot.define do
 
     trait :with_french_futur_release do
       after(:create) do |movie|
-        create :movie_country, release_date: Date.tomorrow, iso_code: 'FR', movie: movie
+        create :movie_country, release_date: Date.today + 1.week, iso_code: 'FR', movie: movie
       end
     end
 

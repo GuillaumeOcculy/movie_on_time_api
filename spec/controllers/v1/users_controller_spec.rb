@@ -26,14 +26,14 @@ RSpec.describe V1::UsersController, type: :controller do
         it 'fails when email is invalid' do
           user_params = attributes_for(:user, email: 'wrong_email')
           post :create, params: user_params
-          body = JSON.parse response.body
+          body = Oj.load response.body
           expect(body['email']).to eq ['is invalid']
         end
 
         it 'fails when email is absent' do
           user_params = attributes_for(:user, email: nil)
           post :create, params: user_params
-          body = JSON.parse response.body
+          body = Oj.load response.body
           expect(body['email']).to eq ['can\'t be blank']
         end
 
@@ -41,7 +41,7 @@ RSpec.describe V1::UsersController, type: :controller do
           create(:user, email: 'test@test.com')
           user_params = attributes_for(:user, email: 'test@test.com')
           post :create, params: user_params
-          body = JSON.parse response.body
+          body = Oj.load response.body
           expect(body['email']).to eq ['has already been taken']
         end     
       end
@@ -50,14 +50,14 @@ RSpec.describe V1::UsersController, type: :controller do
         it 'fails when password is too short' do
           user_params = attributes_for(:user, password: 'short')
           post :create, params: user_params
-          body = JSON.parse response.body
+          body = Oj.load response.body
           expect(body['password']).to eq ['is too short (minimum is 6 characters)']
         end
 
         it 'fails when password is absent' do
           user_params = attributes_for(:user, password: nil)
           post :create, params: user_params
-          body = JSON.parse response.body
+          body = Oj.load response.body
           expect(body['password']).to eq ['can\'t be blank']
         end  
       end 

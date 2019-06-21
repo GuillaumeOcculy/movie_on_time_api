@@ -32,18 +32,18 @@ RSpec.describe V1::MoviesController, type: :controller do
     context 'when params :query is present' do
       it 'returns the queried live movies' do
         get :index, params: { query: 'black' }
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@black_panther.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@black_panther.id])
       end
     end
 
     context 'when params :query is absent' do
       it 'returns the live movies' do
         get :index
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@black_panther.id.to_s, @avengers.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@black_panther.id, @avengers.id])
       end
     end
   end
@@ -63,18 +63,18 @@ RSpec.describe V1::MoviesController, type: :controller do
     context 'when params :q is present' do
       it 'returns the queried movies' do
         get :search, params: { q: 'black' }
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@black_panther.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@black_panther.id])
       end
     end
 
     context 'when params :q is absent' do
       it 'returns all movies' do
         get :search
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        ids = Movie.live.collect {|x| x['id'].to_s }
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        ids = Movie.live.collect {|x| x['id'].to_i }
         expect(movie_ids).to match_array(ids)
       end
     end
@@ -92,20 +92,21 @@ RSpec.describe V1::MoviesController, type: :controller do
     end
 
     context 'when params :query is present' do
-      it 'returns the queried upcoming movies' do
+      it 'returns the queried upcoming movies', :focus do
         get :upcoming, params: { query: 'ant' }
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@ant_man.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+
+        expect(movie_ids).to match_array([@ant_man.id])
       end
     end
 
     context 'when params :query is absent' do
       it 'returns the upcoming movies' do
         get :upcoming
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@ant_man.id.to_s, @xmen.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@ant_man.id, @xmen.id])
       end
     end
   end
@@ -125,18 +126,18 @@ RSpec.describe V1::MoviesController, type: :controller do
     context 'when params :query is present' do
       it 'returns the queried premiere movies' do
         get :premiere, params: { query: 'lion' }
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@lion_king.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@lion_king.id])
       end
     end
 
     context 'when params :query is absent' do
       it 'returns the premiere movies' do
         get :premiere
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@lion_king.id.to_s, @joker.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@lion_king.id, @joker.id])
       end
     end
   end
@@ -155,18 +156,18 @@ RSpec.describe V1::MoviesController, type: :controller do
     context 'when params :query is present' do
       it 'returns the queried reprojection movies' do
         get :reprojection, params: { query: 'titans' }
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@remember_titans.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@remember_titans.id])
       end
     end
 
     context 'when params :query is absent' do
       it 'returns the reprojection movies' do
         get :reprojection
-        body = JSON.parse response.body
-        movie_ids = body['data'].map {|x| x['id']}
-        expect(movie_ids).to match_array([@remember_titans.id.to_s, @forrest_gump.id.to_s])
+        body = Oj.load response.body
+        movie_ids = body['data'].map { |x| x['id'].to_i }
+        expect(movie_ids).to match_array([@remember_titans.id, @forrest_gump.id])
       end
     end
   end

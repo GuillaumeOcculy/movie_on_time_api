@@ -1,9 +1,9 @@
 class V1::FavoriteCinemasController < V1::BaseController
   before_action :authenticate_token!
 
-  def show
+  def index
     param! :page, String
-    param! :query, String
+    param! :q, String
 
     cinemas = @current_user.favorited_cinemas.search(params[:q]).order_by_name if params[:q]
     cinemas ||= @current_user.favorited_cinemas.order_by_name
@@ -13,17 +13,17 @@ class V1::FavoriteCinemasController < V1::BaseController
   end
 
   def create
-    param! :cinema_id, Integer
+    param! :id, Integer
 
-    @current_user.favorite_cinemas.find_or_create_by(cinema_id: params[:cinema_id])
+    @current_user.favorite_cinemas.find_or_create_by(cinema_id: params[:id])
 
     render json: {}, status: :created
   end
 
   def destroy
-    param! :cinema_id, Integer
+    param! :id, Integer
 
-    @current_user.favorite_cinemas.where(cinema_id: params[:cinema_id]).delete_all
+    @current_user.favorite_cinemas.where(cinema_id: params[:id]).delete_all
 
     render json: {}, status: :no_content
   end

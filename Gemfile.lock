@@ -200,6 +200,7 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    oj (3.7.12)
     orm_adapter (0.5.0)
     pastel (0.7.2)
       equatable (~> 0.5.0)
@@ -343,6 +344,7 @@ DEPENDENCIES
   jwt
   letter_opener
   listen (>= 3.0.5, < 3.2)
+  oj
   pg (>= 0.18, < 2.0)
   pry
   puma (~> 3.11)

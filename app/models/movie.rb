@@ -40,7 +40,7 @@ class Movie < ApplicationRecord
   scope :old,       -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date ASC').order_by_title }
   scope :old_premiere, -> { includes(:showtimes).order('showtimes.start_at') }
 
-  scope :search, -> (query) { includes(:movie_translations).where('original_title ILIKE :q OR original_title ILIKE :q', q: "%#{query}%").recent }
+  scope :search, -> (query) { includes(:movie_translations).where('movies.original_title ILIKE :q OR movie_translations.title ILIKE :q', q: "%#{query}%").recent }
 
   scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: {start_date: date}).recent }
   

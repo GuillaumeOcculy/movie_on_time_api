@@ -3,7 +3,7 @@ class V1::WatchlistsController < V1::BaseController
 
   def show
     param! :page, String
-    param! :query, String
+    param! :q, String
 
     movies = @current_user.watchlisted_movies.search(params[:q]) if params[:q]
     movies ||= @current_user.watchlisted_movies.old
@@ -13,17 +13,17 @@ class V1::WatchlistsController < V1::BaseController
   end
 
   def create
-    param! :movie_id, Integer
+    param! :id, Integer
 
-    @current_user.watchlist_movies.find_or_create_by(movie_id: params[:movie_id])
+    @current_user.watchlist_movies.find_or_create_by(movie_id: params[:id])
 
     render json: {}, status: :created
   end
 
   def destroy
-    param! :movie_id, Integer
+    param! :id, Integer
 
-    @current_user.watchlist_movies.where(movie_id: params[:movie_id]).delete_all
+    @current_user.watchlist_movies.where(movie_id: params[:id]).delete_all
 
     render json: {}, status: :no_content
   end

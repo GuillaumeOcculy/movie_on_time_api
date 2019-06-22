@@ -1,9 +1,9 @@
 class V1::CinemasController < V1::BaseController
   def index
-    param! :query, String
+    param! :q, String
 
-    if params[:query]
-      cinemas = Cinema.in_france.search(params[:query])
+    if params[:q]
+      cinemas = Cinema.in_france.search(params[:q])
     else
       cinemas = Cinema.in_france.order_by_name
     end

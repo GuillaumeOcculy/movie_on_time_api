@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
     root 'movies#index'
 
-    post :auth,           to: 'authentication#create'
+    post :auth,          to: 'authentication#create'
 
     get :search,         to: 'movies#search'
     get :upcoming,       to: 'movies#upcoming'
@@ -14,9 +14,9 @@ Rails.application.routes.draw do
     resources :users,     only: :create
     resources :movies,    only: [:index, :show]
 
-    resource :watchlist,  only: [:show, :create, :destroy]
-    resource :favorite_cinemas,  only: [:show, :create, :destroy]
-    resource :watched_movies,  only: [:show, :create, :destroy]
+    resource :watchlist,           only: [:show, :create, :destroy]
+    resources :watched_movies,      only: [:index, :create, :destroy]
+    resources :favorite_cinemas,    only: [:index, :create, :destroy]
 
     resources :cinemas,   only: [:index, :show]
     resources :showtimes, only: :show

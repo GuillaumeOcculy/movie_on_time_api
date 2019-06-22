@@ -68,3 +68,7 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+def sign_in(user)
+  request.headers['Authorization'] = "Bearer #{user.token}"
+end

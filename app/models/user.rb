@@ -17,6 +17,12 @@ class User < ApplicationRecord
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
+  # Settings
+  typed_store :settings do |s|
+    s.string  :language, default: 'fr'
+    s.string  :country, default: 'FR'
+  end
+
   # Methods
   def token
     JsonWebToken.encode(sub: id)

@@ -7,7 +7,7 @@ class V1::FavoriteCinemasController < V1::BaseController
 
     cinemas = @current_user.favorited_cinemas.search(params[:q]).order_by_name if params[:q]
     cinemas ||= @current_user.favorited_cinemas.order_by_name
-  
+
     cinemas = paginate cinemas
     render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), params: {current_user: @current_user}).serialized_json
   end

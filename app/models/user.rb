@@ -21,6 +21,8 @@ class User < ApplicationRecord
   typed_store :settings do |s|
     s.string  :language, default: 'fr'
     s.string  :country, default: 'FR'
+    s.string  :states, array: true, default: [], null: false
+    s.string  :cities, array: true, default: [], null: false
   end
 
   # Methods

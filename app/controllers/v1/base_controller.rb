@@ -46,4 +46,8 @@ class V1::BaseController < ApplicationController
     return unless auth_token
     authenticate_token! 
   end
+
+  def selected_country
+    @current_user&.country || 'FR'
+  end
 end

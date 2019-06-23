@@ -15,7 +15,9 @@ class V1::WatchlistsController < V1::BaseController
   def create
     param! :id, Integer
 
-    @current_user.watchlist_movies.find_or_create_by(movie_id: params[:id])
+    watchlisted = @current_user.watchlist_movies.find_or_create_by(movie_id: params[:id])
+
+    return invalid_resource!(errors = ['movie not watchlisted']) if watchlisted.new_record?
 
     render json: {}, status: :created
   end

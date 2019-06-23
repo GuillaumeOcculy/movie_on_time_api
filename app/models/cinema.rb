@@ -1,4 +1,6 @@
 class Cinema < ApplicationRecord
+  UGC_LIST = YAML.load_file(Rails.root.join('app', 'data', 'cinemas_ugc_unlimited.yml'))['cinemas']
+
   # Associations
   belongs_to :chain, required: false
   belongs_to :country
@@ -33,5 +35,9 @@ class Cinema < ApplicationRecord
 
   def favorited?(user)
     favorited_by_users.exists?(user.id)
+  end
+
+  def ugc_unlimited?
+    UGC_LIST.include?(name)
   end
 end

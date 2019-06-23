@@ -47,10 +47,17 @@ class V1::MoviesController < V1::BaseController
     movie = Movie.find(params[:id])
     date = selected_date || movie.first_live_showtime&.start_date
 
+    cinemas = movie.cinemas.by_country(selected_country)
+
+    if @current_user
+      cinemas = cinemas.by_states(@current_user.states) if @current_user.states.any?
+      cinemas = cinemas.by_cities(@current_user.cities) if @current_user.cities.any?
+    end
+
     cinemas = if params[:q]
-      movie.cinemas.in_france.search(params[:q]).by_showtimes_date(date: date)
+      cinemas.search(params[:q]).by_showtimes_date(date: date)
     else
-      movie.cinemas.in_france.by_showtimes_date(date: date)
+      cinemas.by_showtimes_date(date: date)
     end
 
     if @current_user

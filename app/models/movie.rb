@@ -38,7 +38,7 @@ class Movie < ApplicationRecord
   scope :order_by_title, -> (language = 'fr') { includes(:movie_translations).where(movie_translations: {language: language}).order('movie_translations.title ASC') }
   scope :recent,    -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date DESC').order_by_title }
   scope :old,       -> (iso_code = 'FR') { includes(:movie_countries).where(movie_countries: {iso_code: iso_code}).order('movie_countries.release_date ASC').order_by_title }
-  scope :old_premiere, -> { includes(:showtimes).order('showtimes.start_at') }
+  scope :sort_by_showtime_date, -> { includes(:showtimes).order('showtimes.start_at') }
 
   scope :search, -> (query) { includes(:movie_translations).where('movies.original_title ILIKE :q OR movie_translations.title ILIKE :q', q: "%#{query}%").recent }
 
@@ -48,7 +48,7 @@ class Movie < ApplicationRecord
   scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date > :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).old(iso_code) }
   scope :reprojection, -> (iso_code: 'FR') do
     movie_ids = joins(:movie_countries, :cinemas).merge(MovieCountry.reprojection(iso_code: iso_code)).merge(Cinema.by_country(iso_code)).distinct
-    Movie.includes(:movie_translations).where(id: movie_ids).old_premiere
+    Movie.includes(:movie_translations).where(id: movie_ids).sort_by_showtime_date
   end
 
   scope :premiere, -> (iso_code: 'FR') do
@@ -59,7 +59,7 @@ class Movie < ApplicationRecord
       showtime.start_date < movie_country.release_date
     end.pluck(:id)
 
-    Movie.where(id: movie_ids).old_premiere
+    Movie.where(id: movie_ids).sort_by_showtime_date
   end
 
   # Methods

@@ -22,14 +22,14 @@ module Cachable
     def premiere_cached
       Rails.cache.fetch('movies_premiere') do 
         ids = Movie.premiere.pluck(:id).uniq
-        Movie.where(id: ids).old_premiere
+        Movie.where(id: ids).sort_by_showtime_date
       end
     end
 
     def reprojection_cached
       Rails.cache.fetch('movies_reprojection') do 
         ids = Movie.reprojection.pluck(:id).uniq
-        Movie.where(id: ids).old_premiere
+        Movie.where(id: ids).sort_by_showtime_date
       end
     end
   end

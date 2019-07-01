@@ -3,7 +3,7 @@ class CinemaItemSerializer
   attributes :name, :street, :post_code, :city
 
   attribute :favorited do |object, params|
-    object.favorited?(params[:current_user]) if params[:current_user]
+    object.favorited?(params[:current_user])
   end
 
   attribute :showtimes do |object, params|

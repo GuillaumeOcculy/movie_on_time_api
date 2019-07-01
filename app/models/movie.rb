@@ -91,15 +91,23 @@ class Movie < ApplicationRecord
     showtimes_by_country(iso_code).order(:start_date).first
   end
 
+  def first_live_showtime_date(iso_code= 'FR')
+    first_live_showtime(iso_code)&.start_date
+  end
+
   def showtime_dates
     showtimes.ordered_by_date.pluck(:start_date).uniq.first(7)
   end
 
   def watchlisted?(user)
+    return false unless user
+
     watchlisted_by_users.exists?(user.id)
   end
 
   def watched?(user)
+    return false unless user
+
     watched_by_users.exists?(user.id)
   end
 end

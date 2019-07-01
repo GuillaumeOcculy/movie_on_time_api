@@ -34,6 +34,8 @@ class Cinema < ApplicationRecord
   end
 
   def favorited?(user)
+    return false unless user
+
     favorited_by_users.exists?(user.id)
   end
 

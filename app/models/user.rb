@@ -17,6 +17,11 @@ class User < ApplicationRecord
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
+  # has_many :polls, foreign_key: :creator_id
+  has_many :poll_votes, dependent: :destroy
+  has_many :poll_answers, through: :poll_votes
+  has_many :polls_answered, through: :poll_answers, source: :poll
+
   # Settings
   typed_store :settings do |s|
     s.string  :language, default: 'fr'

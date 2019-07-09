@@ -20,5 +20,9 @@ Rails.application.routes.draw do
 
     resources :cinemas,   only: [:index, :show]
     resources :showtimes, only: :show
+
+    resources :polls, only: [:show] do
+      resources :poll_answers, only: :create
+    end
   end
 end

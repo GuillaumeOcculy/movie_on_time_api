@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_22_171834) do
+ActiveRecord::Schema.define(version: 2019_07_07_163335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,6 +188,32 @@ ActiveRecord::Schema.define(version: 2019_06_22_171834) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "poll_answers", force: :cascade do |t|
+    t.bigint "poll_id"
+    t.text "body", null: false
+    t.integer "vote_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_poll_answers_on_poll_id"
+  end
+
+  create_table "poll_votes", force: :cascade do |t|
+    t.bigint "poll_answer_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_answer_id"], name: "index_poll_votes_on_poll_answer_id"
+    t.index ["user_id"], name: "index_poll_votes_on_user_id"
+  end
+
+  create_table "polls", force: :cascade do |t|
+    t.integer "creator_id"
+    t.text "body", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.bigint "movie_id"
     t.string "name"
@@ -287,6 +313,8 @@ ActiveRecord::Schema.define(version: 2019_06_22_171834) do
   add_foreign_key "movie_genres", "genres"
   add_foreign_key "movie_genres", "movies"
   add_foreign_key "movie_translations", "movies"
+  add_foreign_key "poll_votes", "poll_answers"
+  add_foreign_key "poll_votes", "users"
   add_foreign_key "ratings", "movies"
   add_foreign_key "showtimes", "cinemas"
   add_foreign_key "showtimes", "movies"

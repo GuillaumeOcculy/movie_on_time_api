@@ -12,12 +12,12 @@ class V1::WatchedMoviesController < V1::BaseController
   end
 
   def create
-    param! :id, Integer
+    param! :movie_id, Integer
 
-    watched = @current_user.watched_movies.find_or_create_by(movie_id: params[:id])
+    watched = @current_user.watched_movies.find_or_create_by(movie_id: params[:movie_id])
     return invalid_resource!(errors = ['movie not watchlisted']) if watched.new_record?
 
-    @current_user.watchlist_movies.where(movie_id: params[:id]).delete_all
+    @current_user.watchlist_movies.where(movie_id: params[:movie_id]).delete_all
 
     render json: {}, status: :created
   end

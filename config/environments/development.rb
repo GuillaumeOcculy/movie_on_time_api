@@ -10,7 +10,7 @@ Rails.application.configure do
   end  
   # Settings specified here will take precedence over those in config/application.rb.
 
-    config.middleware.insert_before 0, Rack::Cors, debug: true, logger: (-> { Rails.logger }) do
+  config.middleware.insert_before 0, Rack::Cors do
     allow do
       origins '*'
 
@@ -19,7 +19,6 @@ Rails.application.configure do
       methods: [:get, :post, :put, :patch, :delete, :options, :head]
     end
   end
-
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

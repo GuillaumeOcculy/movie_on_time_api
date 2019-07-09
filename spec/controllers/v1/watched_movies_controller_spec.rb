@@ -67,7 +67,7 @@ RSpec.describe V1::WatchedMoviesController, type: :controller do
     describe '#create' do
       it 'adds into favorite movies list' do
         expect {
-         post :create, params: { id: movie.id }
+         post :create, params: { movie_id: movie.id }
         }.to change(user.watched_movies, :count).by(1)
         expect(response).to have_http_status '201'
       end

@@ -67,7 +67,7 @@ RSpec.describe V1::WatchlistsController, type: :controller do
     describe '#create' do
       it 'adds into watchlisted movies list' do
         expect {
-         post :create, params: { id: movie.id }
+         post :create, params: { movie_id: movie.id }
         }.to change(user.watchlisted_movies, :count).by(1)
         expect(response).to have_http_status '201'
       end
@@ -78,7 +78,7 @@ RSpec.describe V1::WatchlistsController, type: :controller do
         create(:watchlist_movie, user: user, movie: movie)
 
         expect {
-         delete :destroy, params: { id: movie.id }
+         delete :destroy, params: { movie_id: movie.id }
         }.to change(user.watchlisted_movies, :count).by(-1)
         expect(response).to have_http_status '204'
       end

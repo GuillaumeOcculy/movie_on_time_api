@@ -7,15 +7,15 @@ class V1::WatchlistsController < V1::BaseController
 
     movies = @current_user.watchlisted_movies.search(params[:q]) if params[:q]
     movies ||= @current_user.watchlisted_movies.old
-  
+
     movies = paginate movies
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user } ).serialized_json
   end
 
   def create
-    param! :id, Integer
+    param! :movie_id, Integer
 
-    watchlisted = @current_user.watchlist_movies.find_or_create_by(movie_id: params[:id])
+    watchlisted = @current_user.watchlist_movies.find_or_create_by(movie_id: params[:movie_id])
 
     return invalid_resource!(errors = ['movie not watchlisted']) if watchlisted.new_record?
 
@@ -23,9 +23,9 @@ class V1::WatchlistsController < V1::BaseController
   end
 
   def destroy
-    param! :id, Integer
+    param! :movie_id, Integer
 
-    @current_user.watchlist_movies.where(movie_id: params[:id]).delete_all
+    @current_user.watchlist_movies.where(movie_id: params[:movie_id]).delete_all
 
     render json: {}, status: :no_content
   end

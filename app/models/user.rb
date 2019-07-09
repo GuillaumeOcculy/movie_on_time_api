@@ -22,6 +22,9 @@ class User < ApplicationRecord
   has_many :poll_answers, through: :poll_votes
   has_many :polls_answered, through: :poll_answers, source: :poll
 
+  # enum
+  enum role: %i(guest member moderator admin)
+
   # Settings
   typed_store :settings do |s|
     s.string  :language, default: 'fr'

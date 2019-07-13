@@ -1,7 +1,7 @@
 module Api::InternationalShowtimes
   class Base
     include HTTParty
-    
+
     base_uri Settings.international_showtimes.base_url
 
     def initialize
@@ -24,7 +24,7 @@ module Api::InternationalShowtimes
     def cinema(id)
       JSON.parse(self.class.get("/cinemas/#{id}", @options), symbolize_names: true)[:cinema]
     end
-    
+
     def cinemas
       JSON.parse(self.class.get('/cinemas', @options), symbolize_names: true)[:cinemas]
     end

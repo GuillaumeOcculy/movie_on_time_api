@@ -17,10 +17,14 @@ class MovieSerializer
   end
 
   has_many :directors
-  has_many :casts
+
+  has_many :casts do |object|
+    object.casts.first(5)
+  end
+
   has_many :trailers
   has_many :genres
-  
+
   has_many :cinemas, serializer: CinemaItemSerializer do |object, params|
     object.cinemas.where(id: params[:cinema_ids]).order_by_name
   end

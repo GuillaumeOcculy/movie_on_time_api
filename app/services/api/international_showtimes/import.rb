@@ -42,7 +42,7 @@ module Api::InternationalShowtimes
     def save_cinemas
       cinemas.each do |cinema|
         chain = Chain.find_by(external_id: cinema[:chain_id])
-        if chain 
+        if chain
           new_cinema = chain.cinemas.find_or_initialize_by(external_id: cinema[:id], name: cinema[:name], country: @country)
         else
           new_cinema = Cinema.find_or_initialize_by(external_id: cinema[:id], name: cinema[:name], country: @country)
@@ -152,7 +152,7 @@ module Api::InternationalShowtimes
         backdrop = scene_image[:image_files].find{ |x| x[:url].include?('original') }&.dig(:url) 
         backdrop['http://'] = 'https://' if backdrop
       end
-      
+
       backdrop
     end
 
@@ -170,7 +170,7 @@ module Api::InternationalShowtimes
         backdrop_min = scene_image[:image_files].find{ |x| x[:url].include?('w780') }&.dig(:url) 
         backdrop_min['http://'] = 'https://' if backdrop_min
       end
-      
+
       backdrop_min
     end
 
@@ -178,7 +178,7 @@ module Api::InternationalShowtimes
       thumbnail = nil
       thumbnail = response.dig(:poster_image, :image_files)&.find{ |x| x[:url].include?('w342') }&.dig(:url)
       thumbnail['http://'] = 'https://' if thumbnail
-      
+
       thumbnail
     end
 
@@ -186,12 +186,14 @@ module Api::InternationalShowtimes
       poster = nil
       poster = response.dig(:poster_image, :image_files)&.find{ |x| x[:url].include?('original') }&.dig(:url)
       poster['http://'] = 'https://' if poster
-      
+
       poster
     end
 
     def save_ratings(movie, response)
-      response[:ratings]&.each do |is_rating|
+      return unless response[:ratings]
+
+      response[:ratings].each do |is_rating|
         movie.ratings.find_or_create_by(name: is_rating[0]) do |new_rating|
           new_rating.value = is_rating[1][:value]
           new_rating.vote_count = is_rating[1][:vote_count]
@@ -207,7 +209,9 @@ module Api::InternationalShowtimes
     end
 
     def save_trailers(movie, response)
-      response[:trailers]&.each do |trailer|
+      return unless response[:trailers]
+
+      response[:trailers].each do |trailer|
         file = trailer[:trailer_files][0]
         movie.trailers.find_or_create_by(format: file[:format], url: file[:url], language: trailer[:language]) do |new_trailer|
           new_trailer.transfert = file[:transfert]
@@ -216,14 +220,18 @@ module Api::InternationalShowtimes
     end
 
     def save_casts(movie, response)
-      response[:cast]&.first(5)&.each do |cast|
+      return unless response[:cast]
+
+      response[:cast].each do |cast|
         person = Person.find_or_create_by(external_id: cast[:id], name: cast[:name])
         movie.casts.find_or_create_by(external_id: cast[:id], name: cast[:name], character: cast[:character], person: person)
       end
     end
 
     def save_directors(movie, response)
-      response[:crew]&.select{ |crew| crew[:job] == 'director' }&.each do |crew|
+      return unless response[:crew]
+
+      response[:crew].select{ |crew| crew[:job] == 'director' }&.each do |crew|
         person = Person.find_or_create_by(external_id: crew[:id], name: crew[:name])
         movie.directors.find_or_create_by(external_id: crew[:id], name: crew[:name], person: person)
       end

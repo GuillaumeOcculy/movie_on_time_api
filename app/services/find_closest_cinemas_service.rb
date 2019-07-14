@@ -11,7 +11,7 @@ class FindClosestCinemasService
 
   def fetch_cinemas
     cinemas = Cinema.where(id: cinema_ids)
-    return cinemas.order_by_name if (country != 'France') || postal_code.empty?
+    return cinemas.order_by_name if from_mobile || (country != 'France') || postal_code.empty?
 
     cinemas = cinemas.near(postal_code)
     cinemas
@@ -27,5 +27,9 @@ class FindClosestCinemasService
 
   def cinema_ids
     @params[:cinema_ids]
+  end
+
+  def from_mobile
+    @params[:mobile] == 'true'
   end
 end

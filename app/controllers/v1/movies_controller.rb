@@ -100,6 +100,6 @@ class V1::MoviesController < V1::BaseController
     return cinemas if from_mobile || !from_france || params[:postal_code].nil?
 
     cinema_ids = cinemas.map(&:id)
-    Cinema.where(id: cinema_ids).near(params[:postal_code])
+    Cinema.where(id: cinema_ids).near(params[:postal_code], Cinema::RANGE_LIMIT)
   end
 end

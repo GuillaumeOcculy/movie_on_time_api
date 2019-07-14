@@ -13,7 +13,7 @@ class FindClosestCinemasService
     cinemas = Cinema.where(id: cinema_ids)
     return cinemas.order_by_name if from_mobile || (country != 'France') || postal_code.empty?
 
-    cinemas = cinemas.near(postal_code)
+    cinemas = cinemas.near(postal_code, Cinema::RANGE_LIMIT)
     cinemas
   end
 

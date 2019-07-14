@@ -20,7 +20,7 @@ class Cinema < ApplicationRecord
 
   # Scopes
   scope :order_by_name,     -> { order(:name) }
-  scope :search,            -> (search) { where('name ILIKE :q OR city ILIKE :q', q: "%#{search}%").order_by_name }
+  scope :search,            -> (search) { where('name ILIKE :q OR city ILIKE :q OR post_code ILIKE :q', q: "%#{search}%").order_by_name }
   scope :by_country,        -> (iso_code) { where(country_code: iso_code) }
   scope :by_states,         -> (states) { where(state: states) }
   scope :by_cities,         -> (cities) { where(city: cities) }

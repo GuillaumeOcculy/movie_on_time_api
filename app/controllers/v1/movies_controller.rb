@@ -54,7 +54,7 @@ class V1::MoviesController < V1::BaseController
       cinemas = cinemas.by_cities(@current_user.cities) if @current_user.cities.any?
     end
 
-    cinemas = if params[:q]
+    cinemas = if params[:q].present?
       cinemas.search(params[:q]).by_showtimes_date(date: date)
     else
       cinemas.by_showtimes_date(date: date)
@@ -65,12 +65,13 @@ class V1::MoviesController < V1::BaseController
       cinemas = cinemas.where.not(id: favorite_cinemas)
     end
 
+    cinemas = find_closest_cinemas(cinemas)
     cinemas = paginate cinemas
 
     cinema_ids = cinemas.map(&:id)
     favorite_cinema_ids = favorite_cinemas&.map(&:id) || []
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids }, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids, country: params[:country], postal_code: params[:postal_code] }, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
   end
 
   private
@@ -85,5 +86,12 @@ class V1::MoviesController < V1::BaseController
 
   def selected_query
     params[:q] if params[:q].present?
+  end
+
+  def find_closest_cinemas(cinemas)
+    return cinemas if (params[:country] != 'France') || params[:postal_code].nil?
+
+    cinema_ids = cinemas.map(&:id)
+    Cinema.where(id: cinema_ids).near(params[:postal_code])
   end
 end

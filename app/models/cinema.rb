@@ -1,6 +1,9 @@
 class Cinema < ApplicationRecord
   UGC_LIST = YAML.load_file(Rails.root.join('app', 'data', 'cinemas_ugc_unlimited.yml'))['cinemas']
 
+  # Geocoder
+  reverse_geocoded_by :latitude, :longitude
+
   # Associations
   belongs_to :chain, required: false
   belongs_to :country

@@ -7,10 +7,10 @@ class Movie < ApplicationRecord
 
   has_many :movie_countries, dependent: :destroy
   has_many :countries, through: :movie_countries
-  
+
   has_many :movie_genres, dependent: :destroy
   has_many :genres, through: :movie_genres
-  
+
   has_many :casts, dependent: :destroy
   has_many :directors, dependent: :destroy
   has_many :ratings, dependent: :destroy
@@ -43,7 +43,7 @@ class Movie < ApplicationRecord
   scope :search, -> (query) { includes(:movie_translations).where('movies.original_title ILIKE :q OR movie_translations.title ILIKE :q', q: "%#{query}%").recent }
 
   scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: {start_date: date}).recent }
-  
+
   scope :live, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date <= :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).recent(iso_code) }
   scope :upcoming, -> (iso_code: 'FR') { includes(:movie_countries).where('movie_countries.iso_code = :iso_code AND movie_countries.release_date > :date', {iso_code: iso_code, date: Date.today}).references(:movie_countries).old(iso_code) }
   scope :reprojection, -> (iso_code: 'FR') do

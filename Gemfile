@@ -17,6 +17,9 @@ gem 'oj'
 # Multi environment settings
 gem 'config'
 
+# Geolocation
+gem 'geocoder'
+
 # API
 gem 'httparty'
 gem 'versionist'

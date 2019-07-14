@@ -13,9 +13,9 @@ class V1::FavoriteCinemasController < V1::BaseController
   end
 
   def create
-    param! :id, Integer
+    param! :cinema_id, Integer
 
-    favorited = @current_user.favorite_cinemas.find_or_create_by(cinema_id: params[:id])
+    favorited = @current_user.favorite_cinemas.find_or_create_by(cinema_id: params[:cinema_id])
 
     return invalid_resource!(errors = ['cinema not favorited']) if favorited.new_record?
 

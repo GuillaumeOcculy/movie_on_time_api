@@ -97,6 +97,7 @@ class V1::MoviesController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
+    puts "controller mobile: #{from_mobile}"
     return cinemas if from_mobile || !from_france || params[:postal_code].nil?
 
     cinema_ids = cinemas.map(&:id)

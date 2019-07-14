@@ -88,8 +88,16 @@ class V1::MoviesController < V1::BaseController
     params[:q] if params[:q].present?
   end
 
+  def from_mobile
+    params[:mobile] == 'true'
+  end
+
+  def from_france
+    (params[:country] == 'France')
+  end
+
   def find_closest_cinemas(cinemas)
-    return cinemas if (params[:country] != 'France') || params[:postal_code].nil?
+    return cinemas if from_mobile || !from_france || params[:postal_code].nil?
 
     cinema_ids = cinemas.map(&:id)
     Cinema.where(id: cinema_ids).near(params[:postal_code])

@@ -40,8 +40,12 @@ class V1::CinemasController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
-    return cinemas if from_mobile || !from_france || params[:postal_code].nil?
+    return cinemas if from_mobile || !from_france || (params[:latitude].nil? && params[:postal_code].nil?)
 
-    cinemas.near(params[:postal_code], Cinema::RANGE_LIMIT)
+    if params[:latitude] && params[:longitude]
+      cinemas.near([params[:latitude], params[:longitude]], Cinema::RANGE_LIMIT)
+    else
+      cinemas.near(params[:postal_code], Cinema::RANGE_LIMIT)
+    end
   end
 end

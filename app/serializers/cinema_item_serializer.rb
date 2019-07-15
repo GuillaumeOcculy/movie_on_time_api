@@ -5,8 +5,4 @@ class CinemaItemSerializer
   attribute :favorited do |object, params|
     object.favorited?(params[:current_user])
   end
-
-  attribute :showtimes do |object, params|
-    ShowtimeItemSerializer.new(object.showtimes.by_movie_and_date(movie_id: params[:movie_id], date: params[:date])).serializable_hash
-  end
 end

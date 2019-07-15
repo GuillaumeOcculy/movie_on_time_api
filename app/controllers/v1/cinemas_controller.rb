@@ -10,7 +10,7 @@ class V1::CinemasController < V1::BaseController
     end
 
     cinemas = cinemas.search(params[:q]) if params[:q]
-    cinemas = cinemas.order_by_name
+    cinemas = find_closest_cinemas(cinemas)
 
     cinemas = paginate cinemas
 
@@ -29,5 +29,19 @@ class V1::CinemasController < V1::BaseController
 
   def get_cinemas
     Cinema.by_country(selected_country)
+  end
+
+  def from_mobile
+    params[:mobile] == 'true'
+  end
+
+  def from_france
+    params[:country] == 'France'
+  end
+
+  def find_closest_cinemas(cinemas)
+    return cinemas if from_mobile || !from_france || params[:postal_code].nil?
+
+    cinemas.near(params[:postal_code], Cinema::RANGE_LIMIT)
   end
 end

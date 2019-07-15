@@ -93,7 +93,7 @@ class V1::MoviesController < V1::BaseController
   end
 
   def from_france
-    (params[:country] == 'France')
+    params[:country] == 'France'
   end
 
   def find_closest_cinemas(cinemas)

@@ -25,7 +25,7 @@ class MovieSerializer
   has_many :trailers
   has_many :genres
 
-  has_many :cinemas, serializer: CinemaItemSerializer do |object, params|
+  has_many :cinemas, serializer: Movie::CinemaItemSerializer do |object, params|
     FindClosestCinemasService.new(params).perform
   end
 

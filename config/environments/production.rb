@@ -3,7 +3,7 @@ Rails.application.configure do
 
   config.middleware.insert_before 0, Rack::Cors, debug: true, logger: (-> { Rails.logger }) do
     allow do
-      origins 'www.movieontime.com'
+      origins 'www.movieontime.com', 'http://www.movieontime.com.s3-website.eu-west-3.amazonaws.com'
 
       resource '*',
       headers: :any,

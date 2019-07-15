@@ -71,7 +71,7 @@ class V1::MoviesController < V1::BaseController
     cinema_ids = cinemas.map(&:id)
     favorite_cinema_ids = favorite_cinemas&.map(&:id) || []
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids, country: params[:country], postal_code: params[:postal_code], mobile: from_mobile }, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids, country: params[:country], postal_code: params[:postal_code], mobile: from_mobile, latitude: params[:latitude], longitude: params[:longitude] }, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
   end
 
   private
@@ -97,9 +97,13 @@ class V1::MoviesController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
-    return cinemas if from_mobile || !from_france || params[:postal_code].nil?
+    return cinemas if from_mobile || !from_france || (params[:latitude].nil? && params[:postal_code].nil?)
 
     cinema_ids = cinemas.map(&:id)
-    Cinema.where(id: cinema_ids).near(params[:postal_code], Cinema::RANGE_LIMIT)
+    if params[:latitude] && params[:longitude]
+      Cinema.where(id: cinema_ids).near([params[:latitude], params[:longitude]], Cinema::RANGE_LIMIT)
+    else
+      Cinema.where(id: cinema_ids).near(params[:postal_code], Cinema::RANGE_LIMIT)
+    end
   end
 end

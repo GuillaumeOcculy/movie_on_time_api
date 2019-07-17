@@ -28,24 +28,13 @@ class V1::CinemasController < V1::BaseController
   private
 
   def get_cinemas
-    Cinema.by_country(selected_country)
-  end
-
-  def from_mobile
-    params[:mobile] == 'true'
-  end
-
-  def from_france
-    params[:country] == 'France'
+    Cinema.by_country(selected_country).order_by_name
   end
 
   def find_closest_cinemas(cinemas)
-    return cinemas if from_mobile || !from_france || (params[:latitude].nil? && params[:postal_code].nil?)
+    return cinemas unless params[:latitude] && params[:longitude]
 
-    if params[:latitude] && params[:longitude]
-      cinemas.near([params[:latitude], params[:longitude]], Cinema::RANGE_LIMIT)
-    else
-      cinemas.near(params[:postal_code], Cinema::RANGE_LIMIT)
-    end
+    cinemas = Cinema.where(id: cinemas.pluck(:id)) # Must to that to reset the scope order_by_name
+    cinemas.near([params[:latitude], params[:longitude]], Cinema::RANGE_LIMIT)
   end
 end

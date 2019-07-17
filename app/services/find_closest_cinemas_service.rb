@@ -11,7 +11,7 @@ class FindClosestCinemasService
 
   def fetch_cinemas
     cinemas = Cinema.where(id: cinema_ids)
-    return unless latitude && longitude
+    return cinemas.order_by_name unless latitude && longitude
 
     cinemas.near([latitude, longitude], Cinema::RANGE_LIMIT)
   end

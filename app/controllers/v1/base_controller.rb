@@ -44,10 +44,18 @@ class V1::BaseController < ApplicationController
 
   def authenticate_user
     return unless auth_token
-    authenticate_token! 
+    authenticate_token!
   end
 
   def selected_country
     @current_user&.country || 'FR'
+  end
+
+  def latitude
+    params[:latitude]
+  end
+
+  def longitude
+    params[:longitude]
   end
 end

@@ -1,6 +1,6 @@
 class Cinema < ApplicationRecord
   UGC_LIST = YAML.load_file(Rails.root.join('app', 'data', 'cinemas_ugc_unlimited.yml'))['cinemas']
-  RANGE_LIMIT = 30000
+  RANGE_LIMIT = 30_000
 
   # Geocoder
   reverse_geocoded_by :latitude, :longitude

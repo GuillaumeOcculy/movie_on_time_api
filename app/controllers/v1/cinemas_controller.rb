@@ -32,9 +32,9 @@ class V1::CinemasController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
-    return cinemas unless params[:latitude] && params[:longitude]
+    return cinemas unless latitude && longitude
 
     cinemas = Cinema.where(id: cinemas.pluck(:id)) # Must to that to reset the scope order_by_name
-    cinemas.near([params[:latitude], params[:longitude]], Cinema::RANGE_LIMIT)
+    cinemas.near([latitude, longitude], Cinema::RANGE_LIMIT)
   end
 end

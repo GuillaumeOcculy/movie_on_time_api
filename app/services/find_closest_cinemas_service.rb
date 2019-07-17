@@ -14,7 +14,6 @@ class FindClosestCinemasService
     return unless latitude && longitude
 
     cinemas.near([latitude, longitude], Cinema::RANGE_LIMIT)
-    end
   end
 
   def latitude

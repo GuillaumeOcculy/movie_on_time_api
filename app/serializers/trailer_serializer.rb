@@ -1,4 +1,4 @@
 class TrailerSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :url
+  attributes :url, :language
 end

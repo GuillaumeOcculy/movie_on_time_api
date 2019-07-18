@@ -132,7 +132,7 @@ module Api::InternationalShowtimes
     def purge_old_showtimes
       Showtime.upcoming.each do |showtime|
         response = showtime_details(showtime.external_id)
-        showtime.destroy if response.dig(:error, :code) == 10007
+        showtime.destroy if response.is_a?(Hash) && response.dig(:error, :code) == 10007
       end
     end
 

@@ -11,11 +11,11 @@ every 1.day, at: '6:30 am' do
   rake "api:international_showtimes_imports", environment: :production
 end
 
-every 1.day, at: '10:30 am' do
+every 1.day, at: '8:30 am' do
   rake "api:purge_old_showtimes", environment: :production
 end
 
-every 1.day, at: '9:30 am' do
+every 1.day, at: '7:30 am' do
   rake "api:tmdb_imports", environment: :production
 end
 
@@ -23,7 +23,7 @@ every :day, at: '10am' do
   rake 'api:clear_cache', environment: :production
 end
 
-every :day, at: '11:30 am' do
+every :day, at: '10:01 am' do
   rake 'movie:notify_released', environment: :production
 end
 

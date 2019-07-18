@@ -1,6 +1,6 @@
 class ShowtimeSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :start_time, :end_time, :start_date, :version, :dimension
+  attributes :start_time, :end_time, :start_date, :version, :dimension, :booking_link
 
   attribute :cinema do |object|
     Showtime::CinemaSerializer.new(object.cinema).serializable_hash

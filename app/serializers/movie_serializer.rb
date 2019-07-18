@@ -29,7 +29,7 @@ class MovieSerializer
     FindClosestCinemasService.new(params).perform
   end
 
-  has_many :favorited_cinemas, serializer: CinemaItemSerializer do |object, params|
+  has_many :favorited_cinemas, serializer: Movie::CinemaItemSerializer do |object, params|
     object.cinemas.where(id: params[:favorite_cinema_ids]).order_by_name
   end
 end

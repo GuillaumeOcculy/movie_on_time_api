@@ -71,7 +71,17 @@ class V1::MoviesController < V1::BaseController
     cinema_ids = cinemas.map(&:id)
     favorite_cinema_ids = favorite_cinemas&.map(&:id) || []
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: { movie_id: movie.id, cinema_ids: cinema_ids, date: date, current_user: @current_user, favorite_cinema_ids: favorite_cinema_ids, country: params[:country], postal_code: params[:postal_code], latitude: latitude, longitude: longitude }, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
+    params_to_send = {
+      movie_id: movie.id,
+      cinema_ids: cinema_ids,
+      date: date,
+      current_user: @current_user,
+      favorite_cinema_ids: favorite_cinema_ids,
+      latitude: latitude,
+      longitude: longitude
+    }
+
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: params_to_send, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
   end
 
   private

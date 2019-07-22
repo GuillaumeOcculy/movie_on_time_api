@@ -60,28 +60,23 @@ class V1::MoviesController < V1::BaseController
       cinemas.by_showtimes_date(date: date)
     end
 
-    if @current_user
-      favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.map(&:id))
-      cinemas = cinemas.where.not(id: favorite_cinemas)
-    end
-
     cinemas = find_closest_cinemas(cinemas)
+    favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.pluck(:id)) if @current_user
+
     cinemas = paginate cinemas
 
-    cinema_ids = cinemas.map(&:id)
-    favorite_cinema_ids = favorite_cinemas&.map(&:id) || []
+    cinema_ids = cinemas.pluck(:id) + favorite_cinemas.pluck(:id)
 
     params_to_send = {
       movie_id: movie.id,
       cinema_ids: cinema_ids,
       date: date,
       current_user: @current_user,
-      favorite_cinema_ids: favorite_cinema_ids,
       latitude: latitude,
       longitude: longitude
     }
 
-    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: params_to_send, include: [:directors, :casts, :trailers, :genres, :cinemas, :favorited_cinemas]).serialized_json
+    render json: MovieSerializer.new(movie, meta: meta_attributes(cinemas), params: params_to_send, include: [:directors, :casts, :trailers, :genres, :cinemas]).serialized_json
   end
 
   private
@@ -99,7 +94,7 @@ class V1::MoviesController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
-    cinema_ids = cinemas.map(&:id)
+    cinema_ids = cinemas.pluck(:id)
 
     if latitude && longitude
       Cinema.where(id: cinema_ids).near([latitude, longitude], Cinema::RANGE_LIMIT)

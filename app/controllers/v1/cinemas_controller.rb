@@ -11,7 +11,14 @@ class V1::CinemasController < V1::BaseController
 
     cinemas = cinemas.search(params[:q]) if params[:q]
     cinemas = find_closest_cinemas(cinemas)
+    favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.pluck(:id)) if @current_user
 
+    cinemas = paginate cinemas
+
+    cinema_ids = cinemas.pluck(:id)
+    favorite_cinema_ids = favorite_cinemas.pluck(:id)
+
+    cinemas = Cinema.where(id: cinema_ids + favorite_cinema_ids)
     cinemas = paginate cinemas
 
     render json: CinemaItemSerializer.new(cinemas, meta: meta_attributes(cinemas), params: {current_user: @current_user}).serialized_json

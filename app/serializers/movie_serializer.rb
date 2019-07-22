@@ -17,19 +17,14 @@ class MovieSerializer
   end
 
   has_many :directors
+  has_many :trailers
+  has_many :genres
 
   has_many :casts do |object|
     object.casts.first(5)
   end
 
-  has_many :trailers
-  has_many :genres
-
   has_many :cinemas, serializer: Movie::CinemaItemSerializer do |object, params|
     FindClosestCinemasService.new(params).perform
-  end
-
-  has_many :favorited_cinemas, serializer: Movie::CinemaItemSerializer do |object, params|
-    object.cinemas.where(id: params[:favorite_cinema_ids]).order_by_name
   end
 end

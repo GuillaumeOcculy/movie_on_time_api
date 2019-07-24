@@ -61,11 +61,11 @@ class V1::MoviesController < V1::BaseController
     end
 
     cinemas = find_closest_cinemas(cinemas)
-    favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.pluck(:id)) if @current_user
+    favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.map(&:id)) if @current_user
 
     cinemas = paginate cinemas
 
-    cinema_ids = cinemas.pluck(:id) + favorite_cinemas.pluck(:id)
+    cinema_ids = cinemas.map(&:id) + favorite_cinemas.pluck(:id)
 
     params_to_send = {
       movie_id: movie.id,
@@ -94,7 +94,7 @@ class V1::MoviesController < V1::BaseController
   end
 
   def find_closest_cinemas(cinemas)
-    cinema_ids = cinemas.pluck(:id)
+    cinema_ids = cinemas.map(&:id)
 
     if latitude && longitude
       Cinema.where(id: cinema_ids).near([latitude, longitude], Cinema::RANGE_LIMIT)

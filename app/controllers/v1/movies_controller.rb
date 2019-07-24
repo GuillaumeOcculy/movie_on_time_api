@@ -65,7 +65,7 @@ class V1::MoviesController < V1::BaseController
 
     cinemas = paginate cinemas
 
-    cinema_ids = cinemas.map(&:id) + favorite_cinemas.pluck(:id)
+    cinema_ids = cinemas.map(&:id) + (favorite_cinemas&.pluck(:id) || [])
 
     params_to_send = {
       movie_id: movie.id,

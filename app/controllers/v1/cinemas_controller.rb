@@ -16,7 +16,7 @@ class V1::CinemasController < V1::BaseController
     cinemas = paginate cinemas
 
     cinema_ids = cinemas.map(&:id)
-    favorite_cinema_ids = favorite_cinemas.pluck(:id)
+    favorite_cinema_ids = favorite_cinemas&.pluck(:id) || []
 
     cinemas = Cinema.where(id: favorite_cinema_ids + cinema_ids)
     cinemas = paginate cinemas

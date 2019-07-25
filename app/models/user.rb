@@ -25,6 +25,9 @@ class User < ApplicationRecord
   # enum
   enum role: %i(guest member moderator admin)
 
+  # Callbacks
+  after_create_commit :send_welcome_mailer
+
   # Settings
   typed_store :settings do |s|
     s.string  :language, default: 'fr'
@@ -36,5 +39,10 @@ class User < ApplicationRecord
   # Methods
   def token
     JsonWebToken.encode(sub: id)
+  end
+
+  private
+  def send_welcome_mailer
+    UserMailer.welcome(self).deliver_later
   end
 end

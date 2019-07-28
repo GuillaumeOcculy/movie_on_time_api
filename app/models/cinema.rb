@@ -24,9 +24,9 @@ class Cinema < ApplicationRecord
   scope :by_country,        -> (iso_code) { where(country_code: iso_code) }
   scope :by_states,         -> (states) { where(state: states) }
   scope :by_cities,         -> (cities) { where(city: cities) }
-  scope :in_france,         -> { by_country('FR')}
+  scope :in_france,         -> { by_country('FR') }
   scope :in_paris,          -> { where(city: 'Paris').order_by_name }
-  scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: {start_date: date}).order_by_name }
+  scope :by_showtimes_date, -> (date: Date.today) { where(showtimes: { start_date: date }).order_by_name }
 
   # Methods
   def first_live_showtime

@@ -1,4 +1,6 @@
 class V1::CinemasController < V1::BaseController
+  after_action :save_search, if: -> { selected_query }
+
   def index
     param! :q, String
 
@@ -9,7 +11,7 @@ class V1::CinemasController < V1::BaseController
       cinemas = cinemas.by_cities(@current_user.cities) if @current_user.cities.any?
     end
 
-    cinemas = cinemas.search(params[:q]) if params[:q]
+    cinemas = cinemas.search(selected_query) if params[:q]
     cinemas = find_closest_cinemas(cinemas)
     favorite_cinemas = @current_user.favorited_cinemas.where(id: cinemas.map(&:id)) if @current_user
 

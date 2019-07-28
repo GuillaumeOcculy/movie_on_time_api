@@ -1,5 +1,6 @@
 class V1::MoviesController < V1::BaseController
   before_action :check_params
+  after_action :save_search, if: -> { selected_query }
 
   def index
     movies = Movie.live_cached
@@ -87,10 +88,6 @@ class V1::MoviesController < V1::BaseController
 
   def selected_date
     params[:date] if params[:date].present?
-  end
-
-  def selected_query
-    params[:q] if params[:q].present?
   end
 
   def find_closest_cinemas(cinemas)

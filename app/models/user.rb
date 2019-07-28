@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :favorited_cinemas, through: :favorite_cinemas, source: :cinema
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+  has_many :search_histories, dependent: :destroy
 
   # has_many :polls, foreign_key: :creator_id
   has_many :poll_votes, dependent: :destroy

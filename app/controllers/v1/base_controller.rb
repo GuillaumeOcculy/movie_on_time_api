@@ -51,11 +51,19 @@ class V1::BaseController < ApplicationController
     @current_user&.country || 'FR'
   end
 
+  def selected_query
+    params[:q] if params[:q].present?
+  end
+
   def latitude
     params[:latitude]
   end
 
   def longitude
     params[:longitude]
+  end
+
+  def save_search
+    SearchHistory.create(content: selected_query, controller: controller_name, action: action_name, user: @current_user)
   end
 end

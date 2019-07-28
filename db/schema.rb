@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_09_190544) do
+ActiveRecord::Schema.define(version: 2019_07_28_212244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,6 +224,16 @@ ActiveRecord::Schema.define(version: 2019_07_09_190544) do
     t.index ["movie_id"], name: "index_ratings_on_movie_id"
   end
 
+  create_table "search_histories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "content"
+    t.string "controller"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_search_histories_on_user_id"
+  end
+
   create_table "showtimes", force: :cascade do |t|
     t.bigint "cinema_id"
     t.bigint "movie_id"
@@ -317,6 +327,7 @@ ActiveRecord::Schema.define(version: 2019_07_09_190544) do
   add_foreign_key "poll_votes", "poll_answers"
   add_foreign_key "poll_votes", "users"
   add_foreign_key "ratings", "movies"
+  add_foreign_key "search_histories", "users"
   add_foreign_key "showtimes", "cinemas"
   add_foreign_key "showtimes", "movies"
   add_foreign_key "trailers", "movies"

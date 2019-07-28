@@ -1,5 +1,6 @@
 class V1::FavoriteCinemasController < V1::BaseController
   before_action :authenticate_token!
+  after_action :save_search, if: -> { selected_query }
 
   def index
     param! :page, String

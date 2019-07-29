@@ -64,6 +64,6 @@ class V1::BaseController < ApplicationController
   end
 
   def save_search
-    SearchHistory.create(content: selected_query, controller: controller_name, action: action_name, user: @current_user)
+    SearchHistory.create(content: selected_query, controller: controller_name, action: action_name, user: @current_user) if 3 <= (selected_query&.length || 0)
   end
 end

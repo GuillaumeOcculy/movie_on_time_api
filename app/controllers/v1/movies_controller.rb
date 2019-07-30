@@ -14,6 +14,7 @@ class V1::MoviesController < V1::BaseController
     param! :q, String
 
     movies = paginate Movie.search(params[:q])
+    SaveNewMoviesService.new(params[:q]).perform if movies.empty?
 
     render json: MovieItemSerializer.new(movies, meta: meta_attributes(movies), params: { current_user: @current_user }).serialized_json
   end

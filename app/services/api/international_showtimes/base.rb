@@ -29,6 +29,11 @@ module Api::InternationalShowtimes
       JSON.parse(self.class.get('/cinemas', @options), symbolize_names: true)[:cinemas]
     end
 
+    def search_movies(movie_title, lang: 'fr')
+      @options[:query] = { search_query: movie_title, search_field: 'title', lang: lang }
+      JSON.parse(self.class.get('/movies', @options), symbolize_names: true)[:movies]
+    end
+
     def upcoming_movies(country: 'FR')
       @options[:query] = { release_date_from: Date.today, countries: country, include_upcomings: true }
       JSON.parse(self.class.get('/movies', @options), symbolize_names: true)[:movies].select{ |x| x[:id].present? }

@@ -127,6 +127,39 @@ module Api::InternationalShowtimes
       end
     end
 
+    def save_movie_details_from_service(movie_ids)
+      movies = Movie.where(external_id: movie_ids)
+      movies.find_in_batches do |movies|
+        movies.each do |movie|
+          response = movie_details(movie.external_id, @country.iso_code.downcase)
+          next unless response
+
+          movie.update!(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime], 
+                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id], 
+                        backdrop_url: backdrop_url(response), backdrop_min_url: backdrop_min_url(response))
+
+          save_ratings(movie, response)
+          save_movie_genres(movie, response)
+          save_trailers(movie, response)
+          save_casts(movie, response)
+          save_directors(movie, response)
+
+          Country.all.each do |country|
+            response = movie_details(movie.external_id, country.language)
+
+            movie.movie_translations.find_or_create_by(language: country.language) do |new_movie|
+              new_movie.title = response[:title]
+              new_movie.synopsis = response[:synopsis]
+              new_movie.poster_url = poster_url(response)
+              new_movie.thumbnail_url = thumbnail_url(response)
+            end
+
+            save_release_date(movie, country, response)
+          end
+        end
+      end
+    end
+
     # Showtimes we can't find anymore on the API
     # Api::InternationalShowtimes::Import.new.purge_old_showtimes
     def purge_old_showtimes

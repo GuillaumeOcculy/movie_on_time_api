@@ -37,6 +37,9 @@ gem 'jwt'
 # Cron
 gem 'whenever', require: false
 
+# Jobs
+gem 'sidekiq'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 

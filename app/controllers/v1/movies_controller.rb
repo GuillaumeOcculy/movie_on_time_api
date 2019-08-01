@@ -1,6 +1,7 @@
 class V1::MoviesController < V1::BaseController
   before_action :check_params
   after_action :save_search, if: -> { selected_query }
+  after_action :save_new_movies, on: :search, if: -> { selected_query }
 
   def index
     movies = Movie.live_cached
@@ -99,5 +100,12 @@ class V1::MoviesController < V1::BaseController
     else
       Cinema.where(id: cinema_ids).order_by_name
     end
+  end
+
+  def save_new_movies
+    # Only save movies that are not been searched
+    return if SearchHistory.find_by(content: selected_query)
+
+    SaveNewMoviesWorker.perform_async(selected_query)
   end
 end

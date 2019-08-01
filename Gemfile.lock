@@ -97,6 +97,7 @@ GEM
       activesupport (>= 3.0)
       deep_merge (~> 1.2.1)
       dry-validation (>= 0.12.2)
+    connection_pool (2.2.2)
     crass (1.0.4)
     deep_merge (1.2.1)
     devise (4.6.2)
@@ -216,6 +217,8 @@ GEM
     puma (3.12.0)
     rack (2.0.6)
     rack-cors (1.0.2)
+    rack-protection (2.0.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.2)
@@ -247,6 +250,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    redis (4.1.2)
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
@@ -275,6 +279,11 @@ GEM
     shellany (0.0.1)
     shoulda-matchers (4.0.1)
       activesupport (>= 4.2.0)
+    sidekiq (5.2.7)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
@@ -358,6 +367,7 @@ DEPENDENCIES
   rails_param
   rspec-rails (~> 3.8)
   shoulda-matchers
+  sidekiq
   spring-commands-rspec
   tzinfo-data
   versionist

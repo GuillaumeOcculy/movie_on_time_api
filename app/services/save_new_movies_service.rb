@@ -4,6 +4,7 @@
 class SaveNewMoviesService
   def initialize(query)
     @query = query
+    @new_movie_ids = []
   end
 
   def perform
@@ -19,23 +20,18 @@ class SaveNewMoviesService
   end
 
   def save_movie_details
-    Api::InternationalShowtimes::Import.new.save_movie_details_from_service(new_movie_ids)
+    Api::InternationalShowtimes::Import.new.save_movie_details_from_service(@new_movie_ids)
   end
 
   def movie_ids
     @movie_ids.pluck(:id)
   end
 
-  def new_movie_ids
-    @new_movie_ids
-  end
-
   def create_movies
-    @new_movie_ids = []
     movie_ids.each do |movie_id|
       movie = Movie.find_or_initialize_by(external_id: movie_id)
       @new_movie_ids << movie_id if movie.new_record?
-      movie.save!
+      movie.save
     end
   end
 end

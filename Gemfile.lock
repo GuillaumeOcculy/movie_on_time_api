@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/seuros/capistrano-sidekiq.git
+  revision: 9caad25d35b0060d9d0821a5db1f4718b8d2f13e
+  specs:
+    capistrano-sidekiq (1.0.2)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
+
+GIT
   remote: https://github.com/stympy/faker.git
   revision: 14617c4ef7b89998e98e833ad5d11760e03d9bad
   branch: master
@@ -346,6 +354,7 @@ DEPENDENCIES
   capistrano-dotenv-tasks
   capistrano-rails
   capistrano-rvm
+  capistrano-sidekiq!
   capistrano3-puma
   config
   devise

@@ -9,7 +9,7 @@ set :repo_url,    'git@github.com:GuillaumeOcculy/movie_on_time_api.git'
 set :user,        'guillaume'
 
 # Don't change these unless you know what you're doing
-set :pty,             true
+set :pty,             false # There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
 set :use_sudo,        false
 set :stage,           :production
 set :rvm_ruby_version, '2.6.0'
@@ -25,6 +25,11 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :linked_files, %w{config/master.key config/database.yml}
+
+:sidekiq_log => File.join(shared_path, 'log', 'sidekiq.log')
+:sidekiq_pid => File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') # ensure this path exists in production before deploying.
+:sidekiq_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+:sidekiq_timeout => 10
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'

@@ -15,7 +15,7 @@ require "capistrano/rvm"
 require "capistrano/puma"
 require 'whenever/capistrano'
 require 'capistrano/sidekiq'
-require 'capistrano/sidekiq/monit' #to require monit tasks
+#require 'capistrano/sidekiq/monit' #to require monit tasks
 
 install_plugin Capistrano::Puma
 

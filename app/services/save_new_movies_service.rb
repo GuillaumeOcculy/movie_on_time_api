@@ -24,7 +24,7 @@ class SaveNewMoviesService
   end
 
   def movie_ids
-    @movie_ids.pluck(:id)
+    @movie_ids&.pluck(:id) || []
   end
 
   def create_movies

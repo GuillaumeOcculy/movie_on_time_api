@@ -26,10 +26,10 @@ set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :linked_files, %w{config/master.key config/database.yml}
 
-:sidekiq_log => File.join(shared_path, 'log', 'sidekiq.log')
-:sidekiq_pid => File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') # ensure this path exists in production before deploying.
-:sidekiq_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
-:sidekiq_timeout => 10
+set :sidekiq_log => File.join(shared_path, 'log', 'sidekiq.log')
+set :sidekiq_pid => File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') # ensure this path exists in production before deploying.
+set :sidekiq_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+set :sidekiq_timeout => 10
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'

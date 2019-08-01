@@ -9,7 +9,7 @@ set :repo_url,    'git@github.com:GuillaumeOcculy/movie_on_time_api.git'
 set :user,        'guillaume'
 
 # Don't change these unless you know what you're doing
-set :pty,             false # There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
+set :pty,             true # There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
 set :use_sudo,        false
 set :stage,           :production
 set :rvm_ruby_version, '2.6.0'

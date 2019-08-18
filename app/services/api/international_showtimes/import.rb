@@ -101,8 +101,8 @@ module Api::InternationalShowtimes
           response = movie_details(movie.external_id, @country.iso_code.downcase)
           next unless response
 
-          movie.update!(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime], 
-                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id], 
+          movie.update(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime],
+                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id],
                         backdrop_url: backdrop_url(response), backdrop_min_url: backdrop_min_url(response))
 
           save_ratings(movie, response)
@@ -134,8 +134,8 @@ module Api::InternationalShowtimes
           response = movie_details(movie.external_id, @country.iso_code.downcase)
           next unless response
 
-          movie.update!(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime], 
-                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id], 
+          movie.update(original_title: response[:original_title], original_language: response[:original_language], running_time: response[:runtime],
+                        website: response[:website], imdb_id: response[:imdb_id], tmdb_id: response[:tmdb_id], rentrak_film_id: response[:rentrak_film_id],
                         backdrop_url: backdrop_url(response), backdrop_min_url: backdrop_min_url(response))
 
           save_ratings(movie, response)
@@ -182,7 +182,7 @@ module Api::InternationalShowtimes
       scene_image = response[:scene_images]&.first
 
       if scene_image
-        backdrop = scene_image[:image_files].find{ |x| x[:url].include?('original') }&.dig(:url) 
+        backdrop = scene_image[:image_files].find{ |x| x[:url].include?('original') }&.dig(:url)
         backdrop['http://'] = 'https://' if backdrop
       end
 
@@ -200,7 +200,7 @@ module Api::InternationalShowtimes
       backdrop_min = nil
       scene_image = response[:scene_images]&.first
       if scene_image
-        backdrop_min = scene_image[:image_files].find{ |x| x[:url].include?('w780') }&.dig(:url) 
+        backdrop_min = scene_image[:image_files].find{ |x| x[:url].include?('w780') }&.dig(:url)
         backdrop_min['http://'] = 'https://' if backdrop_min
       end
 

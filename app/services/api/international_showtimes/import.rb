@@ -68,7 +68,7 @@ module Api::InternationalShowtimes
     # Api::InternationalShowtimes::Import.new.save_upcoming_movies
     def save_upcoming_movies(country: 'FR')
       upcoming_movies(country: country).each do |movie|
-        new_movie = Movie.find_or_create_by!(external_id: movie[:id])
+        new_movie = Movie.find_or_create_by(external_id: movie[:id])
       end
     end
 
@@ -77,8 +77,8 @@ module Api::InternationalShowtimes
       Cinema.all.each do |cinema|
         response = showtimes(cinema.external_id)
         response.each do |showtime|
-          movie = Movie.find_or_create_by!(external_id: showtime[:movie_id])
-          cinema.showtimes.find_or_create_by!(external_id: showtime[:id], movie: movie) do |new_showtime|
+          movie = Movie.find_or_create_by(external_id: showtime[:movie_id])
+          cinema.showtimes.find_or_create_by(external_id: showtime[:id], movie: movie) do |new_showtime|
             new_showtime.start_at = showtime[:start_at].in_time_zone('Paris').strftime("%Y-%m-%dT%H:%M:00")
             new_showtime.start_date = new_showtime.start_at.to_date
             new_showtime.end_at = new_showtime.start_at + movie.running_time * 60 if movie.running_time
@@ -237,7 +237,7 @@ module Api::InternationalShowtimes
     def save_movie_genres(movie, response)
       response[:genres].each do |is_genre|
         genre = Genre.find_or_create_by(external_id: is_genre[:id])
-        MovieGenre.find_or_create_by!(genre: genre, movie: movie)
+        MovieGenre.find_or_create_by(genre: genre, movie: movie)
       end
     end
 

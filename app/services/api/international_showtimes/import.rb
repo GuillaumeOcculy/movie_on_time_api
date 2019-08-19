@@ -78,18 +78,18 @@ module Api::InternationalShowtimes
         response = showtimes(cinema.external_id)
         response.each do |showtime|
           movie = Movie.find_or_create_by(external_id: showtime[:movie_id])
-          cinema.showtimes.find_or_create_by(external_id: showtime[:id], movie: movie) do |new_showtime|
-            new_showtime.start_at = showtime[:start_at].in_time_zone('Paris').strftime("%Y-%m-%dT%H:%M:00")
-            new_showtime.start_date = new_showtime.start_at.to_date
-            new_showtime.end_at = new_showtime.start_at + movie.running_time * 60 if movie.running_time
-            new_showtime.language = showtime[:language]
-            new_showtime.subtitle_language = showtime[:subtitle_language]
-            new_showtime.auditorium = showtime[:auditorium]
-            new_showtime.dimension = showtime_dimension(showtime)
-            new_showtime.booking_type = showtime[:booking_type]
-            new_showtime.booking_link = showtime[:booking_link]
-            new_showtime.country_code = @country.iso_code
-          end 
+          persisted_showtime = cinema.showtimes.find_or_create_by(external_id: showtime[:id], movie: movie)
+          persisted_showtime.start_at = showtime[:start_at].in_time_zone('Paris').strftime("%Y-%m-%dT%H:%M:00")
+          persisted_showtime.start_date = persisted_showtime.start_at.to_date
+          persisted_showtime.end_at = persisted_showtime.start_at + movie.running_time * 60 if movie.running_time
+          persisted_showtime.language = showtime[:language]
+          persisted_showtime.subtitle_language = showtime[:subtitle_language]
+          persisted_showtime.auditorium = showtime[:auditorium]
+          persisted_showtime.dimension = showtime_dimension(showtime)
+          persisted_showtime.booking_type = showtime[:booking_type]
+          persisted_showtime.booking_link = showtime[:booking_link]
+          persisted_showtime.country_code = @country.iso_code
+          persisted_showtime.save
         end
       end
     end

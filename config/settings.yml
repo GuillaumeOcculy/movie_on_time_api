@@ -4,3 +4,7 @@ international_showtimes:
 tmdb:
   base_url: 'https://api.themoviedb.org/3/'
   api_key: '7c1109395352e900ae045c434aedce0f'
+after_credits:
+  base_url: 'https://after-credits-95724.herokuapp.com/'
+  api_key: 'AtlRBUqOpJ4d3tAAo5Hi1utHmzv9WxafwXJaUzOU'
+  application_id: 'KIaVlwePeCpkXHNucb21T52C6Nnkmk2ISarDkqEw'

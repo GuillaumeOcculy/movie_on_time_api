@@ -75,6 +75,13 @@ class Movie < ApplicationRecord
     movie_translations.find_by(language: language)&.poster_url || movie_translations.where.not(poster_url: nil).first&.poster_url
   end
 
+  def poster_path(language: 'fr')
+    array = poster_url(language: language).split('https://image.tmdb.org/t/p/original')
+    path = array.last
+
+    path
+  end
+
   def thumbnail_url(language: 'fr')
     movie_translations.find_by(language: language)&.thumbnail_url || movie_translations.where.not(thumbnail_url: nil).first&.thumbnail_url
   end

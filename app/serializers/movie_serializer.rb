@@ -4,6 +4,14 @@ class MovieSerializer
 
   attribute :dates, &:showtime_dates
 
+  attribute :after_credits do |object|
+    object.after_credits == 'yes' ? true : false
+  end
+
+  attribute :during_credits do |object|
+    object.during_credits == 'yes' ? true : false
+  end
+
   attribute :date do |object, params|
     params[:date]
   end

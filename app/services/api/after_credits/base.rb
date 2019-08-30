@@ -4,7 +4,7 @@ module Api::AfterCredits
 
     base_uri Settings.after_credits.base_url
 
-    # Api::AfterCredits::Base.new.movie_details
+    # Api::AfterCredits::Base.movie_details('Fast')
     def self.movie_details(movie_title)
       params = {
         'limit': 250,
@@ -23,14 +23,16 @@ module Api::AfterCredits
         }
       }
 
-      post('/parse/classes/ArchiveMovies',
+      response = post('/parse/classes/ArchiveMovies',
         body: params.to_json,
         headers: {
           "X-Parse-Application-Id" => Settings.after_credits.application_id,
           "X-Parse-Client-Key" => Settings.after_credits.api_key,
           "Content-Type" => "application/json; charset=utf-8",
-        }
+        },
       )
+
+      response['results']
     end
   end
 end

@@ -18,8 +18,8 @@ module Api::AfterCredits
     end
 
     def self.set_after_credits(movie, response_movie)
-      during_credits = response_movie['duringCredits'].downcase
-      after_credits = response_movie['yesOrNo'].downcase
+      during_credits = response_movie['duringCredits']&.downcase
+      after_credits = response_movie['yesOrNo']&.downcase
       movie.update(after_credits: after_credits, during_credits: during_credits)
     end
 

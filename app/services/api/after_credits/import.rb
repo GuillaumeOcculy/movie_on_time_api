@@ -32,7 +32,7 @@ module Api::AfterCredits
       return unless movie_country
 
       year = movie_country.release_date.year
-      response_movies = response.select{|x| x['releaseDate']['iso'].include?(year.to_s)}
+      response_movies = response.select{|x| x['releaseDate'] && x['releaseDate']['iso'].include?(year.to_s)}
 
       set_after_credits(movie, response.first) if response_movies.size == 1
     end

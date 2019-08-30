@@ -1,16 +1,8 @@
 class MovieSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :original_title, :title, :poster_url, :thumbnail_url, :backdrop_url, :backdrop_min_url, :synopsis, :running_time, :release_date
+  attributes :original_title, :title, :poster_url, :thumbnail_url, :backdrop_url, :backdrop_min_url, :synopsis, :running_time, :release_date, :after_credits, :during_credits
 
   attribute :dates, &:showtime_dates
-
-  attribute :after_credits do |object|
-    object.after_credits == 'yes' ? true : false
-  end
-
-  attribute :during_credits do |object|
-    object.during_credits == 'yes' ? true : false
-  end
 
   attribute :date do |object, params|
     params[:date]

@@ -12,6 +12,10 @@ namespace :api do
     Api::Tmdb::Import.new.perform
   end
 
+  task after_credits_imports: :environment do
+    Api::AfterCredits::Import.perform
+  end
+
   task clear_cache: :environment do
     Rails.cache.clear
   end

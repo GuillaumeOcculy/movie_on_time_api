@@ -19,6 +19,10 @@ every 1.day, at: '7:30 am' do
   rake "api:tmdb_imports", environment: :production
 end
 
+every :day, at: '9am' do
+  rake 'api:after_credits_imports', environment: :production
+end
+
 every :day, at: '10am' do
   rake 'api:clear_cache', environment: :production
 end

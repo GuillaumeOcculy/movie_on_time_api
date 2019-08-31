@@ -13,6 +13,6 @@ class CinemaSerializer
   end
 
   has_many :movies, serializer: Cinema::MovieItemSerializer do |object, params|
-    object.movies.by_showtimes_date(date: params[:date])
+    object.movies.includes(:directors).by_showtimes_date(date: params[:date])
   end
 end

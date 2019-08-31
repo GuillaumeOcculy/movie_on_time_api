@@ -1,6 +1,6 @@
 class CinemaSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :name, :street, :post_code, :city, :ugc_unlimited?
+  attributes :id, :name, :street, :post_code, :city, :latitude, :longitude, :ugc_unlimited?
 
   attribute :dates, &:showtime_dates
 

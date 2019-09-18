@@ -96,7 +96,16 @@ module Api::InternationalShowtimes
 
     # Api::InternationalShowtimes::Import.new.save_movie_details
     def save_movie_details
-      Movie.draft.find_in_batches do |movies|
+      movie_ids = []
+      movie_ids << Movie.draft.ids
+      movie_ids << Movie.live.ids
+      movie_ids << Movie.upcoming.ids
+
+      movie_ids = movie_ids.flatten
+
+      draft_movies = Movie.where(id: movie_ids)
+
+      draft_movies.find_in_batches do |movies|
         movies.each do |movie|
           response = movie_details(movie.external_id, @country.iso_code.downcase)
           next unless response
@@ -114,12 +123,12 @@ module Api::InternationalShowtimes
           Country.all.each do |country|
             response = movie_details(movie.external_id, country.language)
 
-            movie.movie_translations.find_or_create_by(language: country.language) do |new_movie|
-              new_movie.title = response[:title]
-              new_movie.synopsis = response[:synopsis]
-              new_movie.poster_url = poster_url(response)
-              new_movie.thumbnail_url = thumbnail_url(response)
-            end
+            translation = movie.movie_translations.find_or_initialize_by(language: country.language)
+            translation.title = response[:title]
+            translation.synopsis = response[:synopsis]
+            translation.poster_url = poster_url(response)
+            translation.thumbnail_url = thumbnail_url(response)
+            translation.save
 
             save_release_date(movie, country, response)
           end
@@ -272,7 +281,9 @@ module Api::InternationalShowtimes
 
     def save_release_date(movie, country, response)
       if release_date = response[:release_dates]&.find{ |date| date[0][country.iso_code] }
-        MovieCountry.find_or_create_by(movie: movie, country: country, release_date: release_date[1][0][:date], iso_code: country.iso_code)
+        movie_country = MovieCountry.find_or_initialize_by(movie: movie, country: country, iso_code: country.iso_code)
+        movie_country.release_date =  release_date[1][0][:date]
+        movie_country.save
       end
     end
   end

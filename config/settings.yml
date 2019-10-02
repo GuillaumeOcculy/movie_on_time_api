@@ -1,6 +1,6 @@
 international_showtimes:
   base_url: 'https://api.internationalshowtimes.com/v4/'
-  api_key: 'w10jPslH8yTMpttsNdlpWPMeHiG9Wq8m'
+  api_key: '8NaUiX8ZWN4CBRUJv2YJoZJ0UHSQX7Qa'
 tmdb:
   base_url: 'https://api.themoviedb.org/3/'
   api_key: '7c1109395352e900ae045c434aedce0f'

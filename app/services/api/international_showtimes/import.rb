@@ -73,6 +73,7 @@ module Api::InternationalShowtimes
     end
 
     # Api::InternationalShowtimes::Import.new.save_showtimes
+    # https://api.internationalshowtimes.com/v4/showtimes?movie_id=1832&cinema_id=60361&apikey=8NaUiX8ZWN4CBRUJv2YJoZJ0UHSQX7Qa
     def save_showtimes
       Cinema.all.each do |cinema|
         response = showtimes(cinema.external_id)
